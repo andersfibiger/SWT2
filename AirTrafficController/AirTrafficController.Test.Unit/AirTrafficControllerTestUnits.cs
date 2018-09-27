@@ -23,10 +23,13 @@ namespace AirTrafficController.Test.Unit
             Assert.That(Program.checkIfWithinBoundary(x,y,a),Is.True);
         }
 
-        //checking for just out of range on the lower and upper boundary for x
+        //checking for just out of range on the lower and upper boundary for
+        // + Boundary value analysis
         [TestCase(9999, 15000, 1000)]
         [TestCase(90001, 15000, 1000)]
-
+        [TestCase(90001, 10000, 500)] //x-postition boundary test
+        [TestCase(90000, 9999, 500)] //y-postition boundary test
+        [TestCase(90000, 90000, 499)] //y-postition boundary test
         public static void WithInBoundary_XoutOfRange_ResultIsFalse(int x, int y, int a)
         {
             Assert.That(Program.checkIfWithinBoundary(x,y,a), Is.False);
