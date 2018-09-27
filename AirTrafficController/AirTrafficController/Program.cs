@@ -14,6 +14,7 @@ namespace AirTrafficController
             // Initiate a virtual airspace with air crafts and return a transponder receiver interface to it.
             var transReceiver = TransponderReceiverFactory.CreateTransponderDataReceiver();
             // Subscribe to transponder events with a custom callback method.
+            // It's += because we ADD a listener to the EventHandler
             transReceiver.TransponderDataReady += TransReceiverOnTransponderDataReady;
 
             while (true)
