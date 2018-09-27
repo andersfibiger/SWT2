@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2016
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirTrafficController", "AirTrafficController\AirTrafficController.csproj", "{7B1FC7F5-CBA9-4230-B716-64722928E90C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirTrafficController.Test.Unit", "AirTrafficController.Test.Unit\AirTrafficController.Test.Unit.csproj", "{F60DECC4-571E-44EF-A146-FF0EAE4152FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{7B1FC7F5-CBA9-4230-B716-64722928E90C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B1FC7F5-CBA9-4230-B716-64722928E90C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B1FC7F5-CBA9-4230-B716-64722928E90C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F60DECC4-571E-44EF-A146-FF0EAE4152FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F60DECC4-571E-44EF-A146-FF0EAE4152FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F60DECC4-571E-44EF-A146-FF0EAE4152FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F60DECC4-571E-44EF-A146-FF0EAE4152FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
