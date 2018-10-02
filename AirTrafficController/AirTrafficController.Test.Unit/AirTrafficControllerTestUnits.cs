@@ -6,19 +6,25 @@ using System.Threading.Tasks;
 using AirTrafficController.Framework;
 using AirTrafficController.Test.Unit.Stubs;
 using NUnit.Framework;
+using TransponderReceiver;
 
 namespace AirTrafficController.Test.Unit
 {
     public class AirTrafficControllerTestUnits
     {
-        private static readonly IDecoder _decoder = new StubDecoder();
-        private static readonly ILogger _logger = new StubLogger();
-        private static readonly ITrack _track = new StubTrack(new StubSeparationHandler());
+        // TODO TrafficController is for integration testing
+        //private static TrafficController tC;
+        private static readonly IDecoder _decoder = new Decoder();
+        private static readonly ILogger _logger = new Logger();
+        private static readonly ISeparationHandler _separationHandler = new SeparationHandler();
+        private static readonly ITransponderReceiver _transponderReceiver = new StubTransponderReceiver();
+        private static ITrack _track;
 
         [SetUp]
         public void Setup()
         {
-            
+            // TODO When using integration test, uncomment the following line
+            //tC = new TrafficController(_decoder, _logger, _track, _transponderReceiver);
         }
 
         [TestCase(10000,10000,500)]

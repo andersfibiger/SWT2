@@ -5,6 +5,6 @@ namespace AirTrafficController.Framework
 {
     public interface ISeparationHandler
     {
-        List<string> CheckForSeparationEvents(List<String> trackList);
+        List<string> CheckForSeparationEvents(List<string[]> trackList);
     }
 }

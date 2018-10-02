@@ -60,10 +60,7 @@
   <ItemGroup>
     <Compile Include="AirTrafficControllerTestUnits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Stubs\StubDecoder.cs" />
-    <Compile Include="Stubs\StubLogger.cs" />
-    <Compile Include="Stubs\StubSeparationHandler.cs" />
-    <Compile Include="Stubs\StubTrack.cs" />
+    <Compile Include="Stubs\StubTransponderReceiver.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

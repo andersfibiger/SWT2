@@ -11,6 +11,7 @@ namespace AirTrafficController
         private static readonly int MAX_ALTITUDE = 20000;
         private readonly SeparationHandler _separationHandler;
         private List<string[]> _trackList;
+        private List<string> separationEventList;
 
         public Track(SeparationHandler separationHandler)
         {
@@ -20,6 +21,7 @@ namespace AirTrafficController
         public void UpdateTracks(List<string[]> trackList)
         {
             _trackList = trackList;
+            //separationEventList = _separationHandler.CheckForSeparationEvents(trackList);
         }
 
         public bool CheckIfWithinBoundary(int positionX, int positionY, int altitude)
