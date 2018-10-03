@@ -16,7 +16,7 @@ namespace AirTrafficController
                 new Decoder(),
                 new Logger(),
                 new Track(new SeparationHandler()),
-                new StubTransponderReceiver());
+                transponderDataReceiver);
 
             while (true)
             {

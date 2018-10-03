@@ -4,7 +4,7 @@ using TransponderReceiver;
 
 namespace AirTrafficController.Test.Unit.Stubs
 {
-    public class StubTransponderReceiver : ITransponderReceiver
+    public class StubTransponderReceiver : TransponderReceiver.ITransponderReceiver
     {
         private static List<string> fakeDataList = new List<string>(
             new string[]

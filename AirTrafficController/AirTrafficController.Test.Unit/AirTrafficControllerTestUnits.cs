@@ -18,7 +18,7 @@ namespace AirTrafficController.Test.Unit
         private static readonly ILogger _logger = new Logger();
         private static readonly ISeparationHandler _separationHandler = new SeparationHandler();
         private static readonly ITransponderReceiver _transponderReceiver = new StubTransponderReceiver();
-        private static ITrack _track;
+        private static readonly ITrack _track = new Track(_separationHandler);
 
         [SetUp]
         public void Setup()

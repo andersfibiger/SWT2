@@ -67,7 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AirTrafficController\AirTrafficController.csproj">
-      <Project>{7b1fc7f5-cba9-4230-b716-64722928e90c}</Project>
+      <Project>{7B1FC7F5-CBA9-4230-B716-64722928E90C}</Project>
       <Name>AirTrafficController</Name>
     </ProjectReference>
   </ItemGroup>

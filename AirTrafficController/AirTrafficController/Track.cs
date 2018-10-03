@@ -9,11 +9,11 @@ namespace AirTrafficController
         private static readonly int MAX_X = 90000;
         private static readonly int MIN_ALTITUDE = 500;
         private static readonly int MAX_ALTITUDE = 20000;
-        private readonly SeparationHandler _separationHandler;
+        private readonly ISeparationHandler _separationHandler;
         private List<string[]> _trackList;
         private List<string> separationEventList;
 
-        public Track(SeparationHandler separationHandler)
+        public Track(ISeparationHandler separationHandler)
         {
             _separationHandler = separationHandler;
         }
