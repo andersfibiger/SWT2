@@ -37,7 +37,7 @@ namespace AirTrafficController.Test.Unit
             string[] printData = new string[] { };
             //_uut.LogData(printData);
 
-            //test if print (Logger) was succes
+            //test if print (Logger) was false
             Assert.IsFalse(_uut.LogData(printData));
         }
     }
