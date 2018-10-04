@@ -4,6 +4,6 @@ namespace AirTrafficController.Framework
 {
     public interface ILogger
     {
-        Boolean LogData(string[] dataTracks);
+        bool LogData(string[] dataTracks);
     }
 }

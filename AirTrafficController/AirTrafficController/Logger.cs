@@ -5,7 +5,7 @@ namespace AirTrafficController
 {
     public class Logger : ILogger
     {
-        public Boolean LogData(string[] dataTracks)
+        public bool LogData(string[] dataTracks)
         {
             if (dataTracks == null || dataTracks.Length == 0)
             {
