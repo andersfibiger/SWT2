@@ -25,8 +25,19 @@ namespace AirTrafficController.Test.Unit
         }
 
 
-        //[Test]
-        //public void
+        [Test]
+
+        //Check if _trackList gets updated with new track
+        public void UpdateTracks_tracksAreUpdated()
+        {
+            var info = new string[] { "abcd", "111" };
+            List<string[]> updatedString = new List<string[]>();
+            updatedString.Add(info);
+            _uut.UpdateTracks(updatedString);
+
+            Assert.That(updatedString[0], Is.EqualTo(info));
+            
+        }
 
 
         [TestCase(10000, 10000, 500)]
