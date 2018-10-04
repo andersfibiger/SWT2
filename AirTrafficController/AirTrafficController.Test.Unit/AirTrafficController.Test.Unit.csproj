@@ -64,6 +64,9 @@
     <Compile Include="AirTrafficControllerTestUnits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stubs\StubTransponderReceiver.cs" />
+    <Compile Include="TestSeperationHandler.cs" />
+    <Compile Include="TestTrack.cs" />
+    <Compile Include="TestTrafficController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
