@@ -1,7 +1,9 @@
-﻿namespace AirTrafficController.Framework
+﻿using System;
+
+namespace AirTrafficController.Framework
 {
     public interface ILogger
     {
-        void LogData(string[] dataTracks);
+        bool LogData(string[] dataTracks);
     }
 }
