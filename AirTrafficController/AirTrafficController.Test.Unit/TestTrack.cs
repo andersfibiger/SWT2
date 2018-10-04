@@ -28,15 +28,28 @@ namespace AirTrafficController.Test.Unit
         [Test]
 
         //Check if _trackList gets updated with new track
-        public void UpdateTracks_tracksAreUpdated()
+        public void UpdateTracks_EmptyBeforeInserting_tracksAreUpdated()
         {
             var info = new string[] { "abcd", "111" };
             List<string[]> updatedString = new List<string[]>();
             updatedString.Add(info);
             _uut.UpdateTracks(updatedString);
 
-            Assert.That(updatedString[0], Is.EqualTo(info));
+            Assert.That(updatedString.Contains(info), Is.True);
+        }
+
+        [Test]
+        public void UpdateTracks_OldElementDeleted_TracksAreUpdated()
+        {
+            var info1 = new string[] { "abcd", "111","2019","12345","010101" };
+            var info2 = new string[] { "xyz123", "ggg222", "210900110022", "g", "999999" };
+            List<string[]> updatedString = new List<string[]>();
+            updatedString.Add(info1);
+            updatedString.Add(info2);
+            updatedString.Remove(info1);
+            _uut.UpdateTracks(updatedString);
             
+            Assert.That(updatedString.Contains(info1), Is.False);
         }
 
 
