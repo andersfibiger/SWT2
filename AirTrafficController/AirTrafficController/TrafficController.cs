@@ -10,6 +10,7 @@ namespace AirTrafficController
         private readonly IDecoder _decoder;
         private readonly ILogger _logger;
         private readonly ITrack _track;
+        public int numberOfTracks = 0;
 
         public TrafficController(
             IDecoder decoder, 
@@ -19,7 +20,6 @@ namespace AirTrafficController
         {
             // Subscribe to transponder events with a custom callback method.
             transponderReceiver.TransponderDataReady += TransReceiverOnTransponderDataReady;
-
             _decoder = decoder;
             _logger = logger;
             _track = track;
@@ -29,6 +29,8 @@ namespace AirTrafficController
         {
             List<string[]> tracksStringList = _decoder.DecodeData(e);
             _track.UpdateTracks(tracksStringList);
+            //keep track of flights in Airspace. Great for testing
+            numberOfTracks = tracksStringList.Count;
             // TODO Not implemented yet!
             // _track.GetSeparationEventsList();
             Console.Clear();
@@ -37,6 +39,8 @@ namespace AirTrafficController
             {
                 _logger.LogData(trackData);
             }
+
+
         }
 
 

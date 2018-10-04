@@ -62,7 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AirTrafficControllerTestUnits.cs" />
+    <Compile Include="TransponderReceiverTest.cs" />
     <Compile Include="IDecoderTestUnits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestLogger.cs" />
