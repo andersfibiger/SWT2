@@ -71,5 +71,16 @@ namespace AirTrafficController.Test.Unit
         {
             Assert.That(_uut.CheckIfWithinBoundary(x, y, a), Is.False);
         }
+
+
+        [Test]
+
+        public void GetSeperationEventList_EmptyTracks_ResultIsNull()
+        {
+            _uut.UpdateTracks(new List<string[]>());
+            Assert.That(_uut.GetSeparationEventsList(),Is.Null);
+        }
+
+        
     }
 }
