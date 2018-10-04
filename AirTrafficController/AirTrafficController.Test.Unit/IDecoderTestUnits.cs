@@ -5,17 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using AirTrafficController.Framework;
 using NUnit.Framework;
+using TransponderReceiver;
 
 namespace AirTrafficController.Test.Unit
 {
     class IDecoderTestUnits
     {
-        private static readonly IDecoder _uut;
+        private IDecoder _uut;
 
         [SetUp]
         public void Setup()
         {
-            uut_ = new Decoder();
+            _uut = new Decoder();
         }
 
         [Test]
@@ -27,7 +28,7 @@ namespace AirTrafficController.Test.Unit
             testData.Add("BCD123;10005;85890;12000;20151006213456789");
             testData.Add("XYZ987;25059;75654;4000;20151006213456789");
             // Make new RawTransponderDataEventArgs
-            RawtestData = new RawTransponderDataEventArgs(testData);
+            RawTransponderDataEventArgs RawtestData = new RawTransponderDataEventArgs(testData);
             //Assert that the test data has been read.
              
 

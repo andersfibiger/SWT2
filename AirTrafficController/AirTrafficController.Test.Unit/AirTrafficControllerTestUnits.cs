@@ -35,7 +35,7 @@ namespace AirTrafficController.Test.Unit
         }
 
        
-
+        /*
         public void TestReception()
         {
             List<String> testData = new List<string>();
@@ -50,5 +50,6 @@ namespace AirTrafficController.Test.Unit
 
 
         }
+        */
     }
 }

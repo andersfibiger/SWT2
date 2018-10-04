@@ -57,14 +57,13 @@
     <Reference Include="System.Xml" />
     <Reference Include="TransponderReceiver, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\AirTrafficController\TransponderReceiver.dll</HintPath>
+      <HintPath>..\TransponderReceiver.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AirTrafficControllerTestUnits.cs" />
     <Compile Include="IDecoderTestUnits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Stubs\StubTransponderReceiver.cs" />
     <Compile Include="TestSeperationHandler.cs" />
     <Compile Include="TestTrack.cs" />
     <Compile Include="TestTrafficController.cs" />

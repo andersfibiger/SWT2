@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using AirTrafficController.Framework;
-using AirTrafficController.Test.Unit.Stubs;
 using TransponderReceiver;
 
 namespace AirTrafficController
@@ -26,6 +25,20 @@ namespace AirTrafficController
             _track = track;
         }
 
-        
+        private void TransReceiverOnTransponderDataReady(object sender, RawTransponderDataEventArgs e)
+        {
+            List<string[]> tracksStringList = _decoder.DecodeData(e);
+            _track.UpdateTracks(tracksStringList);
+            // TODO Not implemented yet!
+            // _track.GetSeparationEventsList();
+            Console.Clear();
+            // We iterate over every aircraft.
+            foreach (string[] trackData in tracksStringList)
+            {
+                _logger.LogData(trackData);
+            }
+        }
+
+
     }
 }

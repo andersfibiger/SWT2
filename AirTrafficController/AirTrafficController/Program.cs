@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using AirTrafficController.Framework;
-using AirTrafficController.Test.Unit.Stubs;
 using TransponderReceiver;
 
 namespace AirTrafficController
