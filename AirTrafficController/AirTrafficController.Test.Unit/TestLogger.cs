@@ -25,7 +25,6 @@ namespace AirTrafficController.Test.Unit
         public void LoggerOutput_TestIfPrintWasSucces()
         {
             string[] printData = new string[] { "ABC123", "15000", "15000", "10000", "20151006213456789" };
-            //_uut.LogData(printData);
 
             //test if print (Logger) was succes
             Assert.IsTrue(_uut.LogData(printData));
@@ -35,7 +34,6 @@ namespace AirTrafficController.Test.Unit
         public void LoggerOutput_TestIfPrintReturnsFalseWithNoData()
         {
             string[] printData = new string[] { };
-            //_uut.LogData(printData);
 
             //test if print (Logger) was false
             Assert.IsFalse(_uut.LogData(printData));

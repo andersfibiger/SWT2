@@ -12,8 +12,7 @@ namespace AirTrafficController
                 //return false if dataTracks is empty
                 return false;
             }
-
-            else
+            
             Console.WriteLine("Track tag: " + dataTracks[0]);
             Console.WriteLine($"(X,Y) position: {dataTracks[1]},{dataTracks[2]}");
             Console.WriteLine("Altitude: " + dataTracks[3]);
