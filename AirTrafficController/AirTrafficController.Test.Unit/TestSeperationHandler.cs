@@ -18,64 +18,52 @@ namespace AirTrafficController.Test.Unit
             _uut = new SeparationHandler(); 
         }
 
-        private static readonly List<string[]> TracksNoSeparationList1 = new List<string[]>()
+        private List<string[]> createAndReturnTrackList(string trackX1, string trackY1, string trackZ1, string trackX2, string trackY2, string trackZ2)
         {
-            new string[] {"TESTAAA","0","0","100","2018"},
-            new string[] {"TESTBBB","1256","62124","600","2018"},
-            new string[] {"TESTBOUNDX","5000","0","100","2018"},
-            new string[] {"TESTBOUNDYZ","0","5000","400","2018"},
-            new string[] {"TESTBOUNDXYZ","4999","100","400","2018"}
-        };
-
-        private static readonly List<string[]> TracksNoSeparationList2 = new List<string[]>()
-        {
-            new string[] {"TESTAAA", "0", "0", "100", "2018"},
-            new string[] {"TESTBOUNDXY","4999","100","100","2018"}
-        };
-
-        private static readonly List<string[]> TracksNoSeparationList3 = new List<string[]>()
-        {
-            new string[] {"TESTAAA","0","0","100","2018"},
-            new string[] {"TESTBOUNDZ","6000","0","400","2018"}
-        };
-
-        private static readonly List<string[]> TracksNoSeparationList4 = new List<string[]>()
-        {
-            new string[] {"TESTAAA","0","0","100","2018"},
-            new string[] {"TESTBOUNDXZ","5000","0","400","2018"}
-        };
-
-        // For good measure, test with negative coordinates as well
-        private static readonly List<string[]> TracksNoSeparationList5 = new List<string[]>()
-        {
-            new string[] {"TESTAAA","0","0","100","2018"},
-            new string[] {"TESTBOUNDXNEG","-5000","0","100","2018"},
-            new string[] {"TESTBOUNDYNEG","0","-5000","100","2018"}
-        };
-
-        private static readonly List<string[]> TracksWithSeparationList1 = new List<string[]>()
-        {
-            new string[] {"TESTAAA", "0", "0", "100", "2018"},
-            new string[] {"TESTBOUNDX", "4999", "0", "99", "2018"},
-            new string[] {"TESTBOUNDY", "0", "4999", "99", "2018"},
-            new string[] {"TESTBOUNDZ", "0", "4999", "399", "2018"},
-            new string[] {"TESTBOUNDXNEG", "-4999", "0", "99", "2018"}
-        };
-
-        [Test]
-        public static void SeparationEvents_ValuesInRange_ResultIsTrue()
-        {
-            Assert.That(_uut.CheckForSeparationEvents(TracksNoSeparationList1), Is.Empty);
-            Assert.That(_uut.CheckForSeparationEvents(TracksNoSeparationList2), Is.Empty);
-            Assert.That(_uut.CheckForSeparationEvents(TracksNoSeparationList3), Is.Empty);
-            Assert.That(_uut.CheckForSeparationEvents(TracksNoSeparationList4), Is.Empty);
-            Assert.That(_uut.CheckForSeparationEvents(TracksNoSeparationList5), Is.Empty);
+            return new List<string[]>()
+            {
+                new string[] {"TESTAAA", trackX1, trackY1, trackZ1, "2018"},
+                new string[] {"TESTBBB", trackX2, trackY2, trackZ2, "2018"}
+            };
         }
 
-        [Test]
-        public static void CheckForSeparationEvents_ValuesOutOfRange_ResultIsFalse()
+        [TestCase("0", "0", "100", "1256", "62124", "600")]
+        [TestCase("0", "0", "100", "4000", "4000", "200")]
+        public void SeparationEvents_TracksNotCloseEnough_ResultIsNoSeparation(
+            string trackX1, string trackY1, string trackZ1, 
+            string trackX2, string trackY2, string trackZ2)
         {
-            Assert.That(_uut.CheckForSeparationEvents(TracksWithSeparationList1), Has.Count.EqualTo(4));
+            var tracksNoSeparationList = createAndReturnTrackList(trackX1, trackY1, trackZ1, trackX2, trackY2, trackZ2);
+            Assert.That(_uut.CheckForSeparationEvents(tracksNoSeparationList), Is.Empty);
+        }
+        
+        [TestCase("0", "0", "100", "5000", "0", "100")] // test boundary value for x
+        [TestCase("0", "0", "100", "6000", "0", "400")] // test boundary value for z
+        [TestCase("0", "0", "100", "4999", "100", "100")] // test boundary value for x and y
+        [TestCase("0", "0", "100", "5000", "0", "400")] // test boundary value for x and z
+        [TestCase("0", "0", "100", "0", "5000", "400")] // test boundary value for y and z
+        [TestCase("0", "0", "100", "4999", "100", "400")] // test boundary value for x, y and z
+        [TestCase("0", "0", "100", "-5000", "0", "100")] // test boundary value for negative x
+        [TestCase("0", "0", "100", "0", "-5000", "100")] // test boundary for negative y
+        public void SeparationEvents_TracksNotCloseEnoughBoundary_ResultIsNoSeparation(
+            string trackX1, string trackY1, string trackZ1,
+            string trackX2, string trackY2, string trackZ2)
+        {
+            var tracksNoSeparationList = createAndReturnTrackList(trackX1, trackY1, trackZ1, trackX2, trackY2, trackZ2);
+            Assert.That(_uut.CheckForSeparationEvents(tracksNoSeparationList), Is.Empty);
+        }
+
+        [TestCase("0", "0", "100", "10", "10", "99")]
+        [TestCase("0", "0", "100", "4999", "0", "99")] // boundary value for x
+        [TestCase("0", "0", "100", "0", "4999", "99")] // boundary value for y
+        [TestCase("0", "0", "100", "0", "40", "399")] // boundary value for z
+        [TestCase("0", "0", "100", "-4999", "0", "99")] // boundary value for negative x
+        public void SeparationEvents_TracksCloseEnough_ResultIsSeparation(
+            string trackX1, string trackY1, string trackZ1,
+            string trackX2, string trackY2, string trackZ2)
+        {
+            var tracksWithSeparationList = createAndReturnTrackList(trackX1, trackY1, trackZ1, trackX2, trackY2, trackZ2);
+            Assert.That(_uut.CheckForSeparationEvents(tracksWithSeparationList), Has.Count.EqualTo(1));
         }
     }
 }
