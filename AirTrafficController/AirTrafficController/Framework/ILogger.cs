@@ -4,6 +4,7 @@ namespace AirTrafficController.Framework
 {
     public interface ILogger
     {
-        bool LogData(string[] dataTracks);
+        bool LogData(TrackData dataTracks);
+        void ClearData();
     }
 }

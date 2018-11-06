@@ -24,7 +24,15 @@ namespace AirTrafficController.Test.Unit
         [Test]
         public void LoggerOutput_TestIfPrintWasSucces()
         {
-            string[] printData = new string[] { "ABC123", "15000", "15000", "10000", "20151006213456789" };
+            TrackData printData = new TrackData() {
+                TagId = "ABC123",
+                X = 15000,
+                Y = 15000,
+                Altitude = 10000,
+                TimeStamp = DateTime.ParseExact("20151006213456789",
+                    "yyyyMMddHHmmssfff",
+                    null)
+            };
 
             //test if print (Logger) was succes
             Assert.IsTrue(_uut.LogData(printData));
@@ -33,9 +41,9 @@ namespace AirTrafficController.Test.Unit
         [Test]
         public void LoggerOutput_TestIfPrintReturnsFalseWithNoData()
         {
-            string[] printData = new string[] { };
-
             //test if print (Logger) was false
+            Assert.IsFalse(_uut.LogData(null));
+            TrackData printData = new TrackData() {TagId = ""};
             Assert.IsFalse(_uut.LogData(printData));
         }
     }

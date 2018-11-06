@@ -5,6 +5,6 @@ namespace AirTrafficController.Framework
 {
     public interface IDecoder
     {
-        List<string[]> DecodeData(RawTransponderDataEventArgs data);
+        List<TrackData> DecodeData(RawTransponderDataEventArgs data);
     }
 }

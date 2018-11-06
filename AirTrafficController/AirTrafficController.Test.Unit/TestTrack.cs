@@ -30,8 +30,8 @@ namespace AirTrafficController.Test.Unit
         //Check if _trackList gets updated with new track
         public void UpdateTracks_EmptyBeforeInserting_tracksAreUpdated()
         {
-            var info = new string[] { "abcd", "111" };
-            List<string[]> updatedString = new List<string[]>();
+            var info = new TrackData { TagId = "abcd", X = 111 };
+            List<TrackData> updatedString = new List<TrackData>();
             updatedString.Add(info);
             _uut.UpdateTracks(updatedString);
 
@@ -39,17 +39,18 @@ namespace AirTrafficController.Test.Unit
         }
 
         [Test]
+        [Ignore("The method tested only sets data and raises an event with a separation handler. The latter should be tested instead (with a fake)")]
         public void UpdateTracks_OldElementDeleted_TracksAreUpdated()
         {
-            var info1 = new string[] { "abcd", "111","2019","12345","010101" };
-            var info2 = new string[] { "xyz123", "ggg222", "210900110022", "g", "999999" };
-            List<string[]> updatedString = new List<string[]>();
-            updatedString.Add(info1);
-            updatedString.Add(info2);
-            updatedString.Remove(info1);
-            _uut.UpdateTracks(updatedString);
+            //var info1 = new TrackData() { "abcd", "111","2019","12345","010101" };
+            //var info2 = new TrackData() { "xyz123", "ggg222", "210900110022", "g", "999999" };
+            //List<TrackData> updatedString = new List<TrackData>();
+            //updatedString.Add(info1);
+            //updatedString.Add(info2);
+            //updatedString.Remove(info1);
+            //_uut.UpdateTracks(updatedString);
             
-            Assert.That(updatedString.Contains(info1), Is.False);
+            //Assert.That(updatedString.Contains(info1), Is.False);
         }
 
 
@@ -77,7 +78,7 @@ namespace AirTrafficController.Test.Unit
 
         public void GetSeperationEventList_EmptyTracks_ResultIsNull()
         {
-            _uut.UpdateTracks(new List<string[]>());
+            _uut.UpdateTracks(new List<TrackData>());
             Assert.That(_uut.GetSeparationEventsList(),Is.Null);
         }
 

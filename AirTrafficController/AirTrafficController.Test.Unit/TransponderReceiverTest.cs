@@ -41,7 +41,7 @@ namespace AirTrafficController.Test.Unit
 
        
         [Test]
-        public void _fakeTransponderReceiver_3Tracks()
+        public void TransponderDataReady_RaiseEventWithTracks_ShouldReceiveTracks()
         {
             List<String> testData = new List<string>();
             testData.Add("AAA111;630094;83421;12500;20181002204132530");

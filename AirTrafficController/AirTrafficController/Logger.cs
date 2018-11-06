@@ -5,22 +5,27 @@ namespace AirTrafficController
 {
     public class Logger : ILogger
     {
-        public bool LogData(string[] dataTracks)
+        public bool LogData(TrackData dataTracks)
         {
-            if (dataTracks == null || dataTracks.Length == 0)
+            if (dataTracks == null || dataTracks.TagId.Equals(String.Empty))
             {
                 //return false if dataTracks is empty
                 return false;
             }
             
-            Console.WriteLine("Track tag: " + dataTracks[0]);
-            Console.WriteLine($"(X,Y) position: {dataTracks[1]},{dataTracks[2]}");
-            Console.WriteLine("Altitude: " + dataTracks[3]);
-            Console.WriteLine("Timestamp: " + dataTracks[4]);
+            Console.WriteLine("Track tag: " + dataTracks.TagId);
+            Console.WriteLine($"(X,Y) position: {dataTracks.X},{dataTracks.Y}");
+            Console.WriteLine("Altitude: " + dataTracks.Altitude);
+            Console.WriteLine("Timestamp: " + dataTracks.TimeStamp);
             Console.WriteLine(""); 
 
             //return true if print succes
             return true;
+        }
+
+        public void ClearData()
+        {
+            Console.Clear();
         }
     }
 }

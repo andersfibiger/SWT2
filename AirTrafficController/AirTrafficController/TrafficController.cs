@@ -27,15 +27,15 @@ namespace AirTrafficController
 
         private void TransReceiverOnTransponderDataReady(object sender, RawTransponderDataEventArgs e)
         {
-            List<string[]> tracksStringList = _decoder.DecodeData(e);
-            _track.UpdateTracks(tracksStringList);
+            List<TrackData> trackDataList = _decoder.DecodeData(e);
+            _track.UpdateTracks(trackDataList);
             //keep track of flights in Airspace. Great for testing
-            numberOfTracks = tracksStringList.Count;
+            numberOfTracks = trackDataList.Count;
             // TODO Not implemented yet!
             // _track.GetSeparationEventsList();
-            Console.Clear();
+            _logger.ClearData();
             // We iterate over every aircraft.
-            foreach (string[] trackData in tracksStringList)
+            foreach (TrackData trackData in trackDataList)
             {
                 _logger.LogData(trackData);
             }

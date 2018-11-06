@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TrackData.cs" />
     <Compile Include="Decoder.cs" />
     <Compile Include="Framework\IDecoder.cs" />
     <Compile Include="Framework\ILogger.cs" />
