@@ -14,7 +14,7 @@ namespace AirTrafficController
             TrafficController tC = new TrafficController(
                 new Decoder(),
                 new Logger(),
-                new Track(new SeparationHandler()),
+                new Track(new SeparationHandler(), new CalculateVelocity(), new CalculateCompassCourse()),
                 transponderDataReceiver);
 
             while (true)

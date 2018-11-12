@@ -16,6 +16,7 @@ namespace AirTrafficController
             Console.WriteLine("Track tag: " + dataTracks.TagId);
             Console.WriteLine($"(X,Y) position: {dataTracks.X},{dataTracks.Y}");
             Console.WriteLine("Altitude: " + dataTracks.Altitude);
+            Console.WriteLine("Velocity is: " + dataTracks.Velocity);
             Console.WriteLine("Timestamp: " + dataTracks.TimeStamp);
             Console.WriteLine(""); 
 

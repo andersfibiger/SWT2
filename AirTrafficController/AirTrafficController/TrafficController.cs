@@ -28,7 +28,6 @@ namespace AirTrafficController
         private void TransReceiverOnTransponderDataReady(object sender, RawTransponderDataEventArgs e)
         {
             List<TrackData> trackDataList = _decoder.DecodeData(e);
-            _track.UpdateTracks(trackDataList);
             //keep track of flights in Airspace. Great for testing
             numberOfTracks = trackDataList.Count;
             // TODO Not implemented yet!

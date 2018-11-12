@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AirTrafficController
 {
-    class CalculateVelocity
+    public class CalculateVelocity
     {
         public void CalcVelocity(TrackData OldData, TrackData NewData)
         {
