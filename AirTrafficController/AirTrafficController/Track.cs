@@ -28,7 +28,7 @@ namespace AirTrafficController
         {
             foreach (var TrackData in trackList)
             {
-                if(CheckIfWithinBoundary(TrackData) == false)
+                if(CheckIfWithinBoundary(TrackData) == true)
                 {
                     trackList.Remove(TrackData);
                 }
@@ -52,7 +52,7 @@ namespace AirTrafficController
         {
             for(int i = 0; i<newData.Count; i++)
             {
-                for (int j = 0; j < oldData.Count; j++)
+                for (int j = 0; j  < oldData.Count; j++)
                 {
                     if (newData[i].TagId == oldData[j].TagId)
                     {

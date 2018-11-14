@@ -29,6 +29,7 @@ namespace AirTrafficController
         {
             List<TrackData> trackDataList = _decoder.DecodeData(e);
             //keep track of flights in Airspace. Great for testing
+            _track.UpdateTracks(trackDataList);
             numberOfTracks = trackDataList.Count;
             // TODO Not implemented yet!
             // _track.GetSeparationEventsList();

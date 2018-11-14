@@ -54,8 +54,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CalculateCompassCourse.cs" />
-    <Compile Include="CalculateVelocity.cs" />
+    <Compile Include="Calculating\CalculateCompassCourse.cs" />
+    <Compile Include="Calculating\CalculateVelocity.cs" />
     <Compile Include="TrackData.cs" />
     <Compile Include="Decoder.cs" />
     <Compile Include="Framework\IDecoder.cs" />

@@ -15,7 +15,7 @@ namespace AirTrafficController.Test.Unit
         //Dependencies for Track
         private ISeparationHandler _fakesSeparationHandler;
 
-        [SetUp]
+        /*[SetUp]
         public void SetUp()
         {
             //creating the fake seperationHandler
@@ -36,7 +36,7 @@ namespace AirTrafficController.Test.Unit
             _uut.UpdateTracks(updatedString);
 
             Assert.That(updatedString.Contains(info), Is.True);
-        }
+        }*/
 
         [Test]
         [Ignore("The method tested only sets data and raises an event with a separation handler. The latter should be tested instead (with a fake)")]
@@ -54,7 +54,7 @@ namespace AirTrafficController.Test.Unit
         }
 
 
-        [TestCase(10000, 10000, 500)]
+        /*[TestCase(10000, 10000, 500)]
         [TestCase(90000, 90000, 20000)]
         public static void WithinBoundary_ValuesInRange_resultIsCorret(int x, int y, int a)
         {
@@ -71,7 +71,7 @@ namespace AirTrafficController.Test.Unit
         public static void WithInBoundary_XoutOfRange_ResultIsFalse(int x, int y, int a)
         {
             Assert.That(_uut.CheckIfWithinBoundary(x, y, a), Is.False);
-        }
+        }*/
 
 
         [Test]
