@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using AirTrafficController.Calculating;
 using AirTrafficController.Framework;
 
 namespace AirTrafficController
@@ -7,7 +9,9 @@ namespace AirTrafficController
     public class TrackHandler : ITrackHandler
     {
         private static readonly int MIN_X = 10000;
+        private static readonly int MIN_Y = 10000;
         private static readonly int MAX_X = 90000;
+        private static readonly int MAX_Y = 90000;
         private static readonly int MIN_ALTITUDE = 500;
         private static readonly int MAX_ALTITUDE = 20000;
         private readonly ISeparationHandler _separationHandler;
@@ -31,37 +35,43 @@ namespace AirTrafficController
 
         public void UpdateTracks(object sender, List<TrackData> trackList)
         {
-            foreach (var TrackData in trackList)
+            List<TrackData> tracksInBoundaryList = new List<TrackData>(trackList.Count);
+            foreach (var trackData in trackList)
             {
-                if(CheckIfWithinBoundary(TrackData) == true)
+                if (CheckIfWithinBoundary(trackData))
                 {
-                    trackList.Remove(TrackData);
+                    tracksInBoundaryList.Add(trackData);
                 }
             }
-            CalculateVelocityAndCompassCourse(trackList);
-            oldData = trackList;
+
+            if (tracksInBoundaryList.Count == 0)
+            {
+                return;
+            }
+            CalculateVelocityAndCompassCourse(tracksInBoundaryList);
+            oldData = tracksInBoundaryList;
             // TODO raise event for separation handler instead of this
-            _separationEventList = _separationHandler.CheckForSeparationEvents(trackList);
-            TrackHandlerDataHandler.Invoke(this, trackList);
+            _separationEventList = _separationHandler.CheckForSeparationEvents(tracksInBoundaryList);
+            TrackHandlerDataHandler.Invoke(this, tracksInBoundaryList);
         }
 
-        public bool CheckIfWithinBoundary(TrackData Data)
+        public bool CheckIfWithinBoundary(TrackData data)
         {
-            return Data.X >= MIN_X && Data.X <= MAX_X
-                                      && Data.Y >= MIN_X && Data.Y <= MAX_X
-                                      && Data.Altitude >= MIN_ALTITUDE && Data.Altitude <= MAX_ALTITUDE;
+            return data.X >= MIN_X && data.X <= MAX_X
+                                      && data.Y >= MIN_Y && data.Y <= MAX_Y
+                                      && data.Altitude >= MIN_ALTITUDE && data.Altitude <= MAX_ALTITUDE;
         }
 
         public void CalculateVelocityAndCompassCourse(List<TrackData> newData)
         {
-            for(int i = 0; i<newData.Count; i++)
+            foreach (var newTrack in newData)
             {
-                for (int j = 0; j  < oldData.Count; j++)
+                foreach (var oldTrack in oldData)
                 {
-                    if (newData[i].TagId == oldData[j].TagId)
+                    if (newTrack.TagId == oldTrack.TagId)
                     {
-                        _cv.CalcVelocity(oldData[i], newData[j]);
-                        _cc.CalcCompassCourse(oldData[i], newData[j]);
+                        _cv.CalcVelocity(oldTrack, newTrack);
+                        _cc.CalcCompassCourse(oldTrack, newTrack);
                     }
                 }
             }

@@ -8,6 +8,11 @@ namespace AirTrafficController
 {
     public class Decoder : IDecoder
     {
+        public Decoder(ITransponderReceiver transponderDataReceiver)
+        {
+            transponderDataReceiver.TransponderDataReady += DecodeData;
+        }
+
         public event EventHandler<List<TrackData>> DecodedDataHandler;
 
         public void DecodeData(object sender, RawTransponderDataEventArgs data)

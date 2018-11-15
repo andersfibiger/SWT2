@@ -11,9 +11,12 @@ namespace AirTrafficController
         {
             trackHandler.TrackHandlerDataHandler += LogData;
         }
-        public void LogData(object sender, List<TrackData> TrackList)
+
+        public void LogData(object sender, List<TrackData> trackList)
         {
-            foreach (var dataTracks in TrackList)
+            ClearData();
+
+            foreach (var dataTracks in trackList)
             {
                 if (dataTracks.TagId.Equals(String.Empty))
                 {
@@ -27,7 +30,6 @@ namespace AirTrafficController
                 Console.WriteLine("Course is: " + dataTracks.CompassCourse + ": Degrees");
                 Console.WriteLine("Timestamp: " + dataTracks.TimeStamp);
                 Console.WriteLine("");
-
             }
         }
 
