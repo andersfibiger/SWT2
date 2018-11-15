@@ -67,7 +67,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeparationHandler.cs" />
     <Compile Include="TrackHandler.cs" />
-    <Compile Include="TrafficController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -20,6 +20,9 @@ namespace AirTrafficController
         private CalculateCompassCourse _cc;
 
         public event EventHandler<List<TrackData>> TrackHandlerDataHandler;
+        public event EventHandler<List<TrackData>> SeparationDataHandler;
+        public event EventHandler<List<TrackData>> EnteredAirspaceHandler;
+        public event EventHandler<List<TrackData>> LeftAirspaceHandler;
 
         private List<TrackData> oldData { get; set; }
 
@@ -35,19 +38,53 @@ namespace AirTrafficController
 
         public void UpdateTracks(object sender, List<TrackData> trackList)
         {
+            List<TrackData> TracksWhoLeftAirspace = new List<TrackData>(trackList.Count);
+            List<TrackData> newTracksInAirspace = new List<TrackData>(trackList.Count);
             List<TrackData> tracksInBoundaryList = new List<TrackData>(trackList.Count);
             foreach (var trackData in trackList)
             {
                 if (CheckIfWithinBoundary(trackData))
                 {
                     tracksInBoundaryList.Add(trackData);
+                    if (oldData.Any(data => data.TagId.Equals(trackData.TagId)))
+                    {
+                        newTracksInAirspace.Add(trackData);
+                    }
                 }
+
+                //if (oldData.Any(data => data.TagId.Equals(trackData.TagId)))
+                //{
+                //    TracksWhoLeftAirspace.Add(trackData);
+                //}
             }
 
             if (tracksInBoundaryList.Count == 0)
             {
                 return;
             }
+
+            foreach (var oldTrackData in oldData)
+            {
+                var didTrackLeaveAirspace = true;
+                foreach (var newTrackData in tracksInBoundaryList)
+                {
+                    if (oldTrackData.TagId.Equals(newTrackData.TagId))
+                    {
+                        didTrackLeaveAirspace = false;
+                        break;
+                    }
+                }
+
+                if (didTrackLeaveAirspace)
+                {
+                    TracksWhoLeftAirspace.Add(oldTrackData);
+                    Console.WriteLine("Jeg er smuttet");
+                }
+            }
+
+            EnteredAirspaceHandler.Invoke(this, newTracksInAirspace);
+            LeftAirspaceHandler.Invoke(this, TracksWhoLeftAirspace);
+
             CalculateVelocityAndCompassCourse(tracksInBoundaryList);
             oldData = tracksInBoundaryList;
             // TODO raise event for separation handler instead of this
