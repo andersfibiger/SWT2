@@ -71,7 +71,7 @@ namespace AirTrafficController.Test.Unit
         public static void WithInBoundary_XoutOfRange_ResultIsFalse(int x, int y, int a)
         {
             Assert.That(_uut.CheckIfWithinBoundary(x, y, a), Is.False);
-        }*/
+        }
 
 
         [Test]
@@ -81,7 +81,7 @@ namespace AirTrafficController.Test.Unit
             _uut.UpdateTracks(new List<TrackData>());
             Assert.That(_uut.GetListOfSeparationEvents(),Is.Null);
         }
-
+        */
         
     }
 }

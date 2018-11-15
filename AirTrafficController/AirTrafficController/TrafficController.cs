@@ -1,4 +1,4 @@
-﻿using System;
+﻿/* using System;
 using System.Collections.Generic;
 using AirTrafficController.Framework;
 using TransponderReceiver;
@@ -46,3 +46,4 @@ namespace AirTrafficController
 
     }
 }
+*/
