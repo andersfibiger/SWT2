@@ -8,7 +8,9 @@ namespace AirTrafficController
 {
     public class Decoder : IDecoder
     {
-        public List<TrackData> DecodeData(RawTransponderDataEventArgs data)
+        public event EventHandler<List<TrackData>> DecodedDataHandler;
+
+        public void DecodeData(object sender, RawTransponderDataEventArgs data)
         {
             List<TrackData> formattedDataList = new List<TrackData>();
             // We iterate over every aircraft.
@@ -37,7 +39,8 @@ namespace AirTrafficController
                     TimeStamp = dateTime
                 });
             }
-            return formattedDataList;
+
+            DecodedDataHandler.Invoke(this, formattedDataList);
         }
     }
 }

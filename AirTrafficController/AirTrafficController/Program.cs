@@ -11,14 +11,14 @@ namespace AirTrafficController
         {
             // Initiate a virtual airspace with air crafts and return a transponder receiver interface to it.
             var transponderDataReceiver = TransponderReceiverFactory.CreateTransponderDataReceiver();
-            TrafficController tC = new TrafficController(
-                new Decoder(),
-                new Logger(),
-                new Track(new SeparationHandler(), new CalculateVelocity(), new CalculateCompassCourse()),
-                transponderDataReceiver);
+            var dc = new Decoder();
+            var track = new TrackHandler(new SeparationHandler(), new CalculateVelocity(), new CalculateCompassCourse(), dc);
+            var log = new Logger(track);
+            
 
             while (true)
             {
+
                 System.Threading.Thread.Sleep(1000); // Ugly way of saving some cycles
             }
         }

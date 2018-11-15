@@ -9,13 +9,13 @@ namespace AirTrafficController
     {
         private readonly IDecoder _decoder;
         private readonly ILogger _logger;
-        private readonly ITrack _track;
+        private readonly ITrackHandler _track;
         public int numberOfTracks = 0;
 
         public TrafficController(
             IDecoder decoder, 
             ILogger logger, 
-            ITrack track, 
+            ITrackHandler track, 
             ITransponderReceiver transponderReceiver)
         {
             // Subscribe to transponder events with a custom callback method.
@@ -32,7 +32,7 @@ namespace AirTrafficController
             _track.UpdateTracks(trackDataList);
             numberOfTracks = trackDataList.Count;
             // TODO Not implemented yet!
-            // _track.GetSeparationEventsList();
+            // _track.GetListOfSeparationEvents();
             _logger.ClearData();
             // We iterate over every aircraft.
             foreach (TrackData trackData in trackDataList)

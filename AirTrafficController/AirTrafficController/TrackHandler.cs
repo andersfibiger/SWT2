@@ -1,30 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AirTrafficController.Framework;
 
 namespace AirTrafficController
 {
-    public class Track : ITrack
+    public class TrackHandler : ITrackHandler
     {
         private static readonly int MIN_X = 10000;
         private static readonly int MAX_X = 90000;
         private static readonly int MIN_ALTITUDE = 500;
         private static readonly int MAX_ALTITUDE = 20000;
         private readonly ISeparationHandler _separationHandler;
-        private List<TrackData> _trackList;
         private List<string> _separationEventList;
         private CalculateVelocity _cv;
         private CalculateCompassCourse _cc;
-        public List<TrackData> oldData { get; set; }
 
-        public Track(ISeparationHandler separationHandler, CalculateVelocity cv, CalculateCompassCourse cc)
+        public event EventHandler<List<TrackData>> TrackHandlerDataHandler;
+
+        private List<TrackData> oldData { get; set; }
+
+        public TrackHandler(ISeparationHandler separationHandler, CalculateVelocity cv, CalculateCompassCourse cc, IDecoder dc)
         {
+
             _separationHandler = separationHandler;
             _cv = cv;
             _cc = cc;
+            dc.DecodedDataHandler += UpdateTracks;
             oldData = new List<TrackData>();
         }
 
-        public void UpdateTracks(List<TrackData> trackList)
+        public void UpdateTracks(object sender, List<TrackData> trackList)
         {
             foreach (var TrackData in trackList)
             {
@@ -33,12 +38,11 @@ namespace AirTrafficController
                     trackList.Remove(TrackData);
                 }
             }
-            GetVelocityAndCompassCourse(trackList);
+            CalculateVelocityAndCompassCourse(trackList);
             oldData = trackList;
-            _trackList = trackList;
             // TODO raise event for separation handler instead of this
             _separationEventList = _separationHandler.CheckForSeparationEvents(trackList);
-            
+            TrackHandlerDataHandler.Invoke(this, trackList);
         }
 
         public bool CheckIfWithinBoundary(TrackData Data)
@@ -48,7 +52,7 @@ namespace AirTrafficController
                                       && Data.Altitude >= MIN_ALTITUDE && Data.Altitude <= MAX_ALTITUDE;
         }
 
-        public void GetVelocityAndCompassCourse(List<TrackData> newData)
+        public void CalculateVelocityAndCompassCourse(List<TrackData> newData)
         {
             for(int i = 0; i<newData.Count; i++)
             {
@@ -63,12 +67,7 @@ namespace AirTrafficController
             }
         }
 
-        public int GetNavigationalCourse(int posX1, int posY1, int posX2, int posY2)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public List<string> GetSeparationEventsList()
+        public List<string> GetListOfSeparationEvents()
         {
             return _separationEventList;
         }

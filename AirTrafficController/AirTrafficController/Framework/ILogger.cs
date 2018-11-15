@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AirTrafficController.Framework
 {
     public interface ILogger
     {
-        bool LogData(TrackData dataTracks);
+        void LogData(object sender, List<TrackData> dataTracks);
         void ClearData();
     }
 }

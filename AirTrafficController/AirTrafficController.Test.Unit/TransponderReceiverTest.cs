@@ -23,7 +23,7 @@ namespace AirTrafficController.Test.Unit
         //these are for integrationtest, but will not be tested for now
         private IDecoder Decoder;
         private ILogger _fakeLogger;
-        private ITrack _fakeTrack;
+        private ITrackHandler _fakeTrack;
 
 
         [SetUp]
@@ -33,7 +33,7 @@ namespace AirTrafficController.Test.Unit
             _fakeTransponderReceiver = Substitute.For<ITransponderReceiver>();
             Decoder = new Decoder();
             _fakeLogger = Substitute.For<ILogger>();
-            _fakeTrack = Substitute.For<ITrack>();
+            _fakeTrack = Substitute.For<ITrackHandler>();
 
             //inject the fakes in uut
             _uut = new TrafficController(Decoder, _fakeLogger, _fakeTrack, _fakeTransponderReceiver);

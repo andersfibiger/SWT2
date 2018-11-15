@@ -11,7 +11,7 @@ namespace AirTrafficController.Test.Unit
 {
     class TestTrack
     {
-        private static Track _uut;
+        private static TrackHandler _uut;
         //Dependencies for Track
         private ISeparationHandler _fakesSeparationHandler;
 
@@ -79,7 +79,7 @@ namespace AirTrafficController.Test.Unit
         public void GetSeperationEventList_EmptyTracks_ResultIsNull()
         {
             _uut.UpdateTracks(new List<TrackData>());
-            Assert.That(_uut.GetSeparationEventsList(),Is.Null);
+            Assert.That(_uut.GetListOfSeparationEvents(),Is.Null);
         }
 
         

@@ -61,12 +61,12 @@
     <Compile Include="Framework\IDecoder.cs" />
     <Compile Include="Framework\ILogger.cs" />
     <Compile Include="Framework\ISeparationHandler.cs" />
-    <Compile Include="Framework\ITrack.cs" />
+    <Compile Include="Framework\ITrackHandler.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeparationHandler.cs" />
-    <Compile Include="Track.cs" />
+    <Compile Include="TrackHandler.cs" />
     <Compile Include="TrafficController.cs" />
   </ItemGroup>
   <ItemGroup>
