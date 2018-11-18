@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -10,6 +11,14 @@ namespace AirTrafficController
 {
     public class Logger : ILogger
     {
+        //This for the file logging
+        // StringBuilder sb = new StringBuilder();
+        private List<TrackData> loggingDataForEntered { get; set; }
+        private List<TrackData> loggingDataForLeft { get; set; }
+
+        
+
+
         public Logger(ITrackHandler trackHandler)
         {
             trackHandler.TrackHandlerDataHandler += LogData;
@@ -21,12 +30,24 @@ namespace AirTrafficController
 
         private void LogTrackLeft(object sender, List<TrackData> e)
         {
-            Console.WriteLine("Jeg er daffet");
+            StringBuilder sb = new StringBuilder();
+            Console.WriteLine("Jeg er kommet ud");
+            foreach (var tracklistData in e)
+            {
+                sb.AppendLine($"At time: {tracklistData.TimeStamp} the following plane: {tracklistData.TagId} left the Airspace");
+            }
+            File.AppendAllText("logging.txt", sb.ToString());
         }
 
         private void LogTrackEntered(object sender, List<TrackData> e)
         {
-            Console.WriteLine("Jeg er kommet");
+            StringBuilder sb = new StringBuilder();
+            Console.WriteLine("Jeg er kommet ind");
+            foreach (var tracklistData in e)
+            {
+                sb.AppendLine($"At time: {tracklistData.TimeStamp} the following plane: {tracklistData.TagId} entered the Airspace");
+            }
+            File.AppendAllText("logging.txt", sb.ToString());
         }
 
         private void LogSeparation(object sender, List<TrackData> e)

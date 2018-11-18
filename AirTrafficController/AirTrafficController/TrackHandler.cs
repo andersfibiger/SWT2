@@ -46,16 +46,14 @@ namespace AirTrafficController
                 if (CheckIfWithinBoundary(trackData))
                 {
                     tracksInBoundaryList.Add(trackData);
-                    if (oldData.Any(data => data.TagId.Equals(trackData.TagId)))
+
+                    if (!oldData.Any(data => data.TagId.Equals(trackData.TagId)))
                     {
                         newTracksInAirspace.Add(trackData);
                     }
+
                 }
 
-                //if (oldData.Any(data => data.TagId.Equals(trackData.TagId)))
-                //{
-                //    TracksWhoLeftAirspace.Add(trackData);
-                //}
             }
 
             if (tracksInBoundaryList.Count == 0)
@@ -78,7 +76,6 @@ namespace AirTrafficController
                 if (didTrackLeaveAirspace)
                 {
                     TracksWhoLeftAirspace.Add(oldTrackData);
-                    Console.WriteLine("Jeg er smuttet");
                 }
             }
 
@@ -86,7 +83,7 @@ namespace AirTrafficController
             LeftAirspaceHandler.Invoke(this, TracksWhoLeftAirspace);
 
             CalculateVelocityAndCompassCourse(tracksInBoundaryList);
-            oldData = tracksInBoundaryList;
+            oldData = tracksInBoundaryList.ToList();
             // TODO raise event for separation handler instead of this
             _separationEventList = _separationHandler.CheckForSeparationEvents(tracksInBoundaryList);
             TrackHandlerDataHandler.Invoke(this, tracksInBoundaryList);
