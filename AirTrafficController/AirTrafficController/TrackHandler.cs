@@ -8,12 +8,12 @@ namespace AirTrafficController
 {
     public class TrackHandler : ITrackHandler
     {
-        private static readonly int MIN_X = 10000;
-        private static readonly int MIN_Y = 10000;
-        private static readonly int MAX_X = 90000;
-        private static readonly int MAX_Y = 90000;
-        private static readonly int MIN_ALTITUDE = 500;
-        private static readonly int MAX_ALTITUDE = 20000;
+        private const int MIN_X = 10000;
+        private const int MIN_Y = 10000;
+        private const int MAX_X = 90000;
+        private const int MAX_Y = 90000;
+        private const int MIN_ALTITUDE = 500;
+        private const int MAX_ALTITUDE = 20000;
         private readonly ISeparationHandler _separationHandler;
         private List<string> _separationEventList;
         private CalculateVelocity _cv;
@@ -28,7 +28,6 @@ namespace AirTrafficController
 
         public TrackHandler(ISeparationHandler separationHandler, CalculateVelocity cv, CalculateCompassCourse cc, IDecoder dc)
         {
-
             _separationHandler = separationHandler;
             _cv = cv;
             _cc = cc;
@@ -51,9 +50,7 @@ namespace AirTrafficController
                     {
                         newTracksInAirspace.Add(trackData);
                     }
-
                 }
-
             }
 
             if (tracksInBoundaryList.Count == 0)

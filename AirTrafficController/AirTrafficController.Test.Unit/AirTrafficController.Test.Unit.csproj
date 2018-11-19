@@ -63,13 +63,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TransponderReceiverTest.cs" />
+    <Compile Include="TestTransponderReceiver.cs" />
     <Compile Include="IDecoderTestUnits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestLogger.cs" />
     <Compile Include="TestSeperationHandler.cs" />
-    <Compile Include="TestTrack.cs" />
-    <Compile Include="TestTrafficController.cs" />
+    <Compile Include="TestTrackHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
