@@ -39,28 +39,29 @@ namespace AirTrafficController.Test.Unit
 
             Assert.That(updatedString.Contains(info), Is.True);
         }
-        /*
+        
         [Test]
         [Ignore("The method tested only sets data and raises an event with a separation handler. The latter should be tested instead (with a fake)")]
         public void UpdateTracks_OldElementDeleted_TracksAreUpdated()
         {
-            //var info1 = new TrackData() { "abcd", "111","2019","12345","010101" };
-            //var info2 = new TrackData() { "xyz123", "ggg222", "210900110022", "g", "999999" };
+            //var info1 = new TrackData() {TagId = "abcd", "111", "2019", "12345", "010101" };
+            //var info2 = new TrackData() {TagId = "xyz123", "ggg222", "210900110022", "g", "999999" };
             //List<TrackData> updatedString = new List<TrackData>();
             //updatedString.Add(info1);
             //updatedString.Add(info2);
             //updatedString.Remove(info1);
-            //_uut.UpdateTracks(updatedString);
-            
+            //_uut.UpdateTracks(null, updatedString);
+
             //Assert.That(updatedString.Contains(info1), Is.False);
         }
 
-
+        
         [TestCase(10000, 10000, 500)]
         [TestCase(90000, 90000, 20000)]
         public static void WithinBoundary_ValuesInRange_resultIsCorret(int x, int y, int a)
         {
-            Assert.That(_uut.CheckIfWithinBoundary(x, y, a), Is.True);
+            TrackData trackData = new TrackData() {X = x, Y = y, Altitude = a};
+            Assert.That(_uut.CheckIfWithinBoundary(trackData), Is.True);
         }
 
         //checking for just out of range on the lower and upper boundary for
@@ -72,7 +73,8 @@ namespace AirTrafficController.Test.Unit
         [TestCase(90000, 90000, 499)] //y-postition boundary test
         public static void WithInBoundary_XoutOfRange_ResultIsFalse(int x, int y, int a)
         {
-            Assert.That(_uut.CheckIfWithinBoundary(x, y, a), Is.False);
+            TrackData trackData = new TrackData() { X = x, Y = y, Altitude = a };
+            Assert.That(_uut.CheckIfWithinBoundary(trackData), Is.False);
         }
 
 
@@ -80,10 +82,10 @@ namespace AirTrafficController.Test.Unit
 
         public void GetSeperationEventList_EmptyTracks_ResultIsNull()
         {
-            _uut.UpdateTracks(new List<TrackData>());
+            _uut.UpdateTracks(null, new List<TrackData>());
             Assert.That(_uut.GetListOfSeparationEvents(),Is.Null);
         }
-        */
+        
         
     }
 }
