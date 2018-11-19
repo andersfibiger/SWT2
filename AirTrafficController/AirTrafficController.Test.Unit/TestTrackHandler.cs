@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AirTrafficController.Calculating;
 using AirTrafficController.Framework;
 using NSubstitute;
 using NUnit.Framework;
@@ -12,16 +13,17 @@ namespace AirTrafficController.Test.Unit
     class TestTrack
     {
         private static TrackHandler _uut;
-        //Dependencies for Track
-        private ISeparationHandler _fakesSeparationHandler;
 
-        /*[SetUp]
+        [SetUp]
         public void SetUp()
         {
             //creating the fake seperationHandler
-            _fakesSeparationHandler = Substitute.For<ISeparationHandler>();
+            ISeparationHandler _fakesSeparationHandler = Substitute.For<ISeparationHandler>();
+            CalculateCompassCourse _fakeCalculateCompassCourse = Substitute.For<CalculateCompassCourse>();
+            CalculateVelocity _fakeCalculateVelocity = Substitute.For<CalculateVelocity>();
+            IDecoder _fakeDecoder = Substitute.For<IDecoder>();
             //injecting 
-            _uut = new Track(_fakesSeparationHandler);
+            _uut = new TrackHandler(_fakesSeparationHandler, _fakeCalculateVelocity, _fakeCalculateCompassCourse, _fakeDecoder);
         }
 
 
@@ -33,11 +35,11 @@ namespace AirTrafficController.Test.Unit
             var info = new TrackData { TagId = "abcd", X = 111 };
             List<TrackData> updatedString = new List<TrackData>();
             updatedString.Add(info);
-            _uut.UpdateTracks(updatedString);
+            _uut.UpdateTracks(null, updatedString);
 
             Assert.That(updatedString.Contains(info), Is.True);
-        }*/
-
+        }
+        /*
         [Test]
         [Ignore("The method tested only sets data and raises an event with a separation handler. The latter should be tested instead (with a fake)")]
         public void UpdateTracks_OldElementDeleted_TracksAreUpdated()
@@ -54,7 +56,7 @@ namespace AirTrafficController.Test.Unit
         }
 
 
-        /*[TestCase(10000, 10000, 500)]
+        [TestCase(10000, 10000, 500)]
         [TestCase(90000, 90000, 20000)]
         public static void WithinBoundary_ValuesInRange_resultIsCorret(int x, int y, int a)
         {
