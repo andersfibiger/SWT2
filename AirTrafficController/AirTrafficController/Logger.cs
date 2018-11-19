@@ -12,12 +12,7 @@ namespace AirTrafficController
     public class Logger : ILogger
     {
         //This for the file logging
-        // StringBuilder sb = new StringBuilder();
-        private List<TrackData> loggingDataForEntered { get; set; }
-        private List<TrackData> loggingDataForLeft { get; set; }
-
-        
-
+        private const string LoggingFileName = "logging.txt";
 
         public Logger(ITrackHandler trackHandler)
         {
@@ -31,23 +26,21 @@ namespace AirTrafficController
         private void LogTrackLeft(object sender, List<TrackData> e)
         {
             StringBuilder sb = new StringBuilder();
-            Console.WriteLine("Jeg er kommet ud");
-            foreach (var tracklistData in e)
+            foreach (var trackData in e)
             {
-                sb.AppendLine($"At time: {tracklistData.TimeStamp} the following plane: {tracklistData.TagId} left the Airspace");
+                sb.AppendLine($"At time: {trackData.TimeStamp} the following plane: {trackData.TagId} left the Airspace");
             }
-            File.AppendAllText("logging.txt", sb.ToString());
+            File.AppendAllText(LoggingFileName, sb.ToString());
         }
 
         private void LogTrackEntered(object sender, List<TrackData> e)
         {
             StringBuilder sb = new StringBuilder();
-            Console.WriteLine("Jeg er kommet ind");
-            foreach (var tracklistData in e)
+            foreach (var trackData in e)
             {
-                sb.AppendLine($"At time: {tracklistData.TimeStamp} the following plane: {tracklistData.TagId} entered the Airspace");
+                sb.AppendLine($"At time: {trackData.TimeStamp} the following plane: {trackData.TagId} entered the Airspace");
             }
-            File.AppendAllText("logging.txt", sb.ToString());
+            File.AppendAllText(LoggingFileName, sb.ToString());
         }
 
         private void LogSeparation(object sender, List<TrackData> e)
@@ -61,24 +54,22 @@ namespace AirTrafficController
 
             StringBuilder stringBuilder = new StringBuilder();
         
-            foreach (var dataTracks in trackList)
+            foreach (var trackData in trackList)
             {
-                if (dataTracks.TagId.Equals(String.Empty))
+                if (trackData.TagId.Equals(String.Empty))
                 {
                     //return false if dataTracks is empty
                     continue;
                 }
 
-                Console.WriteLine("Track tag: " + dataTracks.TagId);
-                Console.WriteLine($"(X,Y) position: {dataTracks.X},{dataTracks.Y}");
-                Console.WriteLine("Altitude: " + dataTracks.Altitude);
-                Console.WriteLine("Velocity is: " + dataTracks.Velocity + ": m/s");
-                Console.WriteLine("Course is: " + dataTracks.CompassCourse + ": Degrees");
-                Console.WriteLine("Timestamp: " + dataTracks.TimeStamp);
+                Console.WriteLine("Track tag: " + trackData.TagId);
+                Console.WriteLine($"(X,Y) position: {trackData.X},{trackData.Y}");
+                Console.WriteLine("Altitude: " + trackData.Altitude);
+                Console.WriteLine("Velocity is: " + trackData.Velocity + ": m/s");
+                Console.WriteLine("Course is: " + trackData.CompassCourse + ": Degrees");
+                Console.WriteLine("Timestamp: " + trackData.TimeStamp);
                 Console.WriteLine("");
             }
-
-            //stringBuilder.Append($"Track tag: {data}");
             File.AppendAllText("log.txt",stringBuilder.ToString());
 
         }
