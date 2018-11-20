@@ -27,7 +27,7 @@ namespace AirTrafficController
         public event EventHandler<ICollection<string>> SeparationJustNowHandler;
         public event EventHandler<ICollection<string>> SeparationWithinTimePeriodHandler;
 
-        private List<TrackData> _oldTracksInBoundary = new List<TrackData>();
+        public List<TrackData> _oldTracksInBoundary = new List<TrackData>();
         private List<string> _oldTracksWithSeparation = new List<string>();
         private IDictionary<TrackData, long> _tracksWhichEnteredAirspaceWithinTimePeriod = new Dictionary<TrackData, long>();
         private IDictionary<TrackData, long> _tracksWhichLeftAirspaceWithinTimePeriod = new Dictionary<TrackData, long>();
