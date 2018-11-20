@@ -21,7 +21,7 @@ namespace AirTrafficController.Test.Unit
         public void Setup()
         {
             ITrackHandler _fakeTrackHandler = Substitute.For<ITrackHandler>();
-            _uut = new Logger(_fakeTrackHandler);
+            _uut = new Logger(_fakeTrackHandler, "../../logging.txt");
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace AirTrafficController.Test.Unit
         }
 
         [Test]
-        public void LoggerOutput_TestIfPrintReturnsFalseWithNoData()
+        public void LoggerOutput_TestIfPrintThrowsExceptionWhenDataListIsEmpty()
         {
             //test if print(Logger) was false
             List<TrackData> emptyData = new List<TrackData>();
