@@ -8,13 +8,13 @@ namespace AirTrafficController
 {
     public class TrackHandler : ITrackHandler
     {
-        private const int MIN_X = 10000;
-        private const int MIN_Y = 10000;
-        private const int MAX_X = 90000;
-        private const int MAX_Y = 90000;
-        private const int MIN_ALTITUDE = 500;
-        private const int MAX_ALTITUDE = 20000;
-        private const long TIME_PERIOD_FOR_EVENTS_IN_MS = 5000;
+        private const int MinX = 10000;
+        private const int MinY = MinX;
+        private const int MaxX = 90000;
+        private const int MaxY = MaxX;
+        private const int MinAltitude = 500;
+        private const int MaxAltitude = 20000;
+        private const long TimePeriodForEventsInMs = 5000;
         private readonly ISeparationHandler _separationHandler;
         private readonly CalculateVelocity _cv;
         private readonly CalculateCompassCourse _cc;
@@ -43,19 +43,20 @@ namespace AirTrafficController
         public void UpdateTracks(object sender, List<TrackData> trackList)
         {
             var currentTimeInMs = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            CheckIfTracksHaveExpiredEvents(_tracksWhichEnteredAirspaceWithinTimePeriod, currentTimeInMs);
-            CheckIfTracksHaveExpiredEvents(_tracksWhichLeftAirspaceWithinTimePeriod, currentTimeInMs);
+            RemoveTracksWithExpiredEvents(_tracksWhichEnteredAirspaceWithinTimePeriod, currentTimeInMs);
+            RemoveTracksWithExpiredEvents(_tracksWhichLeftAirspaceWithinTimePeriod, currentTimeInMs);
 
             var tracksWhichEnteredAirspaceJustNow = new List<TrackData>(trackList.Count);
             var tracksWhichLeftAirspaceJustNow = new List<TrackData>(trackList.Count);
 
             var tracksInBoundaryList = new List<TrackData>(trackList.Count);
+            
             foreach (var trackData in trackList)
             {
-                if (!CheckIfWithinBoundary(trackData)) continue;
+                if (!IsTrackWithinBoundary(trackData)) continue;
                 tracksInBoundaryList.Add(trackData);
 
-                if (_oldTracksInBoundary.Any(data => data.TagId.Equals(trackData.TagId))) continue;
+                if (!IsTrackNew(_oldTracksInBoundary, trackData.TagId)) continue;
                 tracksWhichEnteredAirspaceJustNow.Add(trackData);
                 _tracksWhichEnteredAirspaceWithinTimePeriod.Add(trackData, currentTimeInMs);
             }
@@ -83,7 +84,7 @@ namespace AirTrafficController
                 _tracksWhichLeftAirspaceWithinTimePeriod.Add(oldTrackData, currentTimeInMs);
             }
 
-            var currentSeparationEventList = _separationHandler.CheckForSeparationEvents(tracksInBoundaryList);
+            var currentSeparationEventList = _separationHandler.GetListOfSeparationEvents(tracksInBoundaryList);
             var newSeparationEventList = new List<string>(currentSeparationEventList.Count);
             foreach (var timeStampAndTagId1AndTagId2 in currentSeparationEventList)
             {
@@ -99,35 +100,41 @@ namespace AirTrafficController
             }
 
             _oldTracksWithSeparation = currentSeparationEventList;
-
-            EnteredAirspaceJustNowHandler.Invoke(this, tracksWhichEnteredAirspaceJustNow);
-            EnteredAirspaceWithinTimePeriodHandler.Invoke(this, _tracksWhichEnteredAirspaceWithinTimePeriod.Keys);
-            LeftAirspaceJustNowHandler.Invoke(this, tracksWhichLeftAirspaceJustNow);
-            LeftAirspaceWithinTimePeriodHandler.Invoke(this, _tracksWhichLeftAirspaceWithinTimePeriod.Keys);
-            SeparationJustNowHandler.Invoke(this, newSeparationEventList);
-            SeparationWithinTimePeriodHandler.Invoke(this, currentSeparationEventList);
-
             CalculateVelocityAndCompassCourse(tracksInBoundaryList);
             _oldTracksInBoundary = tracksInBoundaryList;
 
-            TrackHandlerDataHandler.Invoke(this, tracksInBoundaryList);
+            // Invoke events on all event handlers, if any.
+            EnteredAirspaceJustNowHandler?.Invoke(this, tracksWhichEnteredAirspaceJustNow);
+            EnteredAirspaceWithinTimePeriodHandler?.Invoke(this, _tracksWhichEnteredAirspaceWithinTimePeriod.Keys);
+            LeftAirspaceJustNowHandler?.Invoke(this, tracksWhichLeftAirspaceJustNow);
+            LeftAirspaceWithinTimePeriodHandler?.Invoke(this, _tracksWhichLeftAirspaceWithinTimePeriod.Keys);
+            SeparationJustNowHandler?.Invoke(this, newSeparationEventList);
+            SeparationWithinTimePeriodHandler?.Invoke(this, currentSeparationEventList);
+            TrackHandlerDataHandler?.Invoke(this, tracksInBoundaryList);
         }
 
-        private void CheckIfTracksHaveExpiredEvents(IDictionary<TrackData, long> tracks, long currentTimeInMs)
+        public bool IsTrackNew(List<TrackData> oldTracksInBoundary, string trackDataTagId)
         {
-            var tracksCopy = tracks;
-            var tracksWithExpiredEvent = tracks.Where(pair => currentTimeInMs - pair.Value > TIME_PERIOD_FOR_EVENTS_IN_MS).ToArray();
+            return _oldTracksInBoundary.Any(data => data.TagId.Equals(trackDataTagId));
+        }
+
+        public void RemoveTracksWithExpiredEvents(IDictionary<TrackData, long> tracks, long currentTimeInMs)
+        {
+            var tracksWithExpiredEvent = tracks
+                .Where(pair => currentTimeInMs - pair.Value > TimePeriodForEventsInMs)
+                .ToArray();
+
             foreach (var trackData in tracksWithExpiredEvent)
             {
                 tracks.Remove(trackData);
             }
         }
 
-        public bool CheckIfWithinBoundary(TrackData data)
+        public bool IsTrackWithinBoundary(TrackData data)
         {
-            return data.X >= MIN_X && data.X <= MAX_X
-                                      && data.Y >= MIN_Y && data.Y <= MAX_Y
-                                      && data.Altitude >= MIN_ALTITUDE && data.Altitude <= MAX_ALTITUDE;
+            return data.X >= MinX && data.X <= MaxX
+                                      && data.Y >= MinY && data.Y <= MaxY
+                                      && data.Altitude >= MinAltitude && data.Altitude <= MaxAltitude;
         }
 
         public void CalculateVelocityAndCompassCourse(List<TrackData> newData)
@@ -144,10 +151,5 @@ namespace AirTrafficController
                 }
             }
         }
-
-        //public List<string> GetListOfSeparationEvents()
-        //{
-        //    return _separationEventList;
-        //}
     }
 }

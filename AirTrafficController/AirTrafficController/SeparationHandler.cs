@@ -8,7 +8,7 @@ namespace AirTrafficController
     {
         private const double MinDistance = 5000.0; // in meters
         private const int MinAltitude = 300;
-        public List<string> CheckForSeparationEvents(List<TrackData> trackList)
+        public List<string> GetListOfSeparationEvents(List<TrackData> trackList)
         {
             List<string> separationEventList = new List<string>();
             // The ugly O((n+1)/2) implementation of the comparison

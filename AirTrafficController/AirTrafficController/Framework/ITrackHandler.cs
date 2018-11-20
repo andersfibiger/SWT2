@@ -6,8 +6,7 @@ namespace AirTrafficController.Framework
     public interface ITrackHandler
     {
         void UpdateTracks(object sender, List<TrackData> trackList);
-        bool CheckIfWithinBoundary(TrackData data);
-        //List<string> GetListOfSeparationEvents();
+        bool IsTrackWithinBoundary(TrackData data);
         event EventHandler<ICollection<TrackData>> TrackHandlerDataHandler;
         event EventHandler<ICollection<TrackData>> EnteredAirspaceJustNowHandler;
         event EventHandler<ICollection<TrackData>> EnteredAirspaceWithinTimePeriodHandler;

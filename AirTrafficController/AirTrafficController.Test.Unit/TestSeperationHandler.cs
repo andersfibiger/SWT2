@@ -35,7 +35,7 @@ namespace AirTrafficController.Test.Unit
             int trackX2, int trackY2, int trackZ2)
         {
             var tracksNoSeparationList = createAndReturnTrackList(trackX1, trackY1, trackZ1, trackX2, trackY2, trackZ2);
-            Assert.That(_uut.CheckForSeparationEvents(tracksNoSeparationList), Is.Empty);
+            Assert.That(_uut.GetListOfSeparationEvents(tracksNoSeparationList), Is.Empty);
         }
         
         [TestCase(0, 0, 100, 5000, 0, 100)] // test boundary value for x
@@ -51,7 +51,7 @@ namespace AirTrafficController.Test.Unit
             int trackX2, int trackY2, int trackZ2)
         {
             var tracksNoSeparationList = createAndReturnTrackList(trackX1, trackY1, trackZ1, trackX2, trackY2, trackZ2);
-            Assert.That(_uut.CheckForSeparationEvents(tracksNoSeparationList), Is.Empty);
+            Assert.That(_uut.GetListOfSeparationEvents(tracksNoSeparationList), Is.Empty);
         }
 
         [TestCase(0, 0, 100, 10, 10, 99)]
@@ -64,7 +64,7 @@ namespace AirTrafficController.Test.Unit
             int trackX2, int trackY2, int trackZ2)
         {
             var tracksWithSeparationList = createAndReturnTrackList(trackX1, trackY1, trackZ1, trackX2, trackY2, trackZ2);
-            Assert.That(_uut.CheckForSeparationEvents(tracksWithSeparationList), Has.Count.EqualTo(1));
+            Assert.That(_uut.GetListOfSeparationEvents(tracksWithSeparationList), Has.Count.EqualTo(1));
         }
     }
 }
