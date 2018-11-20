@@ -24,11 +24,11 @@ namespace AirTrafficController.Test.Unit
             IDecoder _fakeDecoder = Substitute.For<IDecoder>();
             //injecting 
             _uut = new TrackHandler(_fakesSeparationHandler, _fakeCalculateVelocity, _fakeCalculateCompassCourse, _fakeDecoder);
+            
         }
 
 
         [Test]
-
         //Check if _trackList gets updated with new track
         public void UpdateTracks_EmptyBeforeInserting_tracksAreUpdated()
         {
@@ -61,7 +61,7 @@ namespace AirTrafficController.Test.Unit
         public static void WithinBoundary_ValuesInRange_resultIsCorret(int x, int y, int a)
         {
             TrackData trackData = new TrackData() {X = x, Y = y, Altitude = a};
-            Assert.That(_uut.CheckIfWithinBoundary(trackData), Is.True);
+            Assert.That(_uut.IsTrackWithinBoundary(trackData), Is.True);
         }
 
         //checking for just out of range on the lower and upper boundary for
@@ -71,10 +71,10 @@ namespace AirTrafficController.Test.Unit
         [TestCase(90001, 10000, 500)] //x-postition boundary test
         [TestCase(90000, 9999, 500)] //y-postition boundary test
         [TestCase(90000, 90000, 499)] //y-postition boundary test
-        public static void WithInBoundary_XoutOfRange_ResultIsFalse(int x, int y, int a)
+        public static void WithinBoundary_XoutOfRange_ResultIsFalse(int x, int y, int a)
         {
             TrackData trackData = new TrackData() { X = x, Y = y, Altitude = a };
-            Assert.That(_uut.CheckIfWithinBoundary(trackData), Is.False);
+            Assert.That(_uut.IsTrackWithinBoundary(trackData), Is.False);
         }
 
 
@@ -85,7 +85,28 @@ namespace AirTrafficController.Test.Unit
             //_uut.UpdateTracks(null, new List<TrackData>());
             //Assert.That(_uut.GetListOfSeparationEvents(),Is.Null);
         }
-        
-        
+
+        [Test]
+        public void RemoveTracksWithExpiredEvents_EmptyTracks_DoesNothing()
+        {
+            var emptyTrackEventList = new Dictionary<TrackData, long>();
+            _uut.RemoveTracksWithExpiredEvents(emptyTrackEventList, 0);
+            Assert.That(emptyTrackEventList, Is.Empty);
+        }
+
+        [TestCase(0, 0, 1)]
+        [TestCase(20, 100, 1)]
+        [TestCase(0, 5000, 1)]
+        [TestCase(0, 5001, 0)]
+        public void RemoveTracksWithExpiredEvents_TracksWithExpiredEvents_RemovesOnlyExpiredEvents(
+            long oldTimeInMs, long currentTimeInMs, int expectedNoTracksLeft)
+        {
+            var trackEventList = new Dictionary<TrackData, long>()
+            {
+                {new TrackData(), oldTimeInMs}
+            };
+            _uut.RemoveTracksWithExpiredEvents(trackEventList, currentTimeInMs);
+            Assert.That(trackEventList.Count, Is.EqualTo(expectedNoTracksLeft));
+        }
     }
 }
