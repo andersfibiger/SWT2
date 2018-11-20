@@ -19,6 +19,7 @@ namespace AirTrafficController.Test.integration
 
         private TrackData _track1;
         private TrackData _track2;
+        private TrackData _conflictingTrack;
         private List<TrackData> _tracklist1;
         private List<TrackData> _tracklist2;
 
@@ -52,22 +53,46 @@ namespace AirTrafficController.Test.integration
                 Altitude = 1000,
                 TimeStamp = new DateTime(2018, 04, 05, 20, 20, 20)
             };
+
+            _conflictingTrack = new TrackData
+            {
+                TagId = "GFHIJ",
+                X = 90000,
+                Y = 88000,
+                Altitude = 1100,
+                TimeStamp = new DateTime(2018, 04, 05, 20, 20, 18)
+            };
         }
 
 
         [Test]
         public void TestCalculateVelocity_VelocityIs5000()
         {
-            
             _tracklist1.Add(_track1);
             _tracklist2.Add(_track2);
-            
+            //save old trackdata
             _sut._oldTracksInBoundary = _tracklist1;
-
+            
             _sut.CalculateVelocityAndCompassCourse(_tracklist2);
-
             Assert.That(Math.Round(_track2.Velocity), Is.EqualTo(5000));
         }
 
+        [Test]
+        public void TestCalculateCompassCourse_compassIs90()
+        {
+            _tracklist1.Add(_track1);
+            _tracklist2.Add(_track2);
+            //save old trackdata
+            _sut._oldTracksInBoundary = _tracklist1;
+
+            _sut.CalculateVelocityAndCompassCourse(_tracklist2);
+            Assert.That(Math.Round(_track2.CompassCourse),Is.EqualTo(90));
+        }
+
+        [Test]
+        public void TestSeparationHandler_()
+        {
+
+        }
     }
 }
