@@ -13,45 +13,101 @@ namespace AirTrafficController
     public class Logger : ILogger
     {
         //This for the file logging
-        private const string LoggingFileName = "..\\..\\logging.txt";
+        private readonly string _pathToLoggingFile;
+        private string _tracksLeftLogString = "";
+        private string _tracksEnteredLogString = "";
+        private string _tracksSeparationLogString = "";
 
-        public Logger(ITrackHandler trackHandler)
+        public Logger(ITrackHandler trackHandler, string pathToLoggingFile)
         {
             trackHandler.TrackHandlerDataHandler += LogData;
-            trackHandler.SeparationDataHandler += LogSeparation;
-            trackHandler.EnteredAirspaceHandler += LogTrackEntered;
-            trackHandler.LeftAirspaceHandler += LogTrackLeft;
-
+            trackHandler.LeftAirspaceJustNowHandler += LogTrackLeftToFile;
+            trackHandler.LeftAirspaceWithinTimePeriodHandler += LogTrackLeftToConsole;
+            trackHandler.EnteredAirspaceJustNowHandler += LogTrackEnteredToFile;
+            trackHandler.EnteredAirspaceWithinTimePeriodHandler += LogTrackEnteredToConsole;
+            trackHandler.SeparationJustNowHandler += LogSeparationToFile;
+            trackHandler.SeparationWithinTimePeriodHandler += LogSeparationToConsole;
+            _pathToLoggingFile = pathToLoggingFile;
         }
 
-        private void LogTrackLeft(object sender, List<TrackData> e)
+        public void LogTrackLeftToFile(object sender, ICollection<TrackData> e)
         {
             StringBuilder sb = new StringBuilder();
             foreach (var trackData in e)
             {
-                sb.AppendLine($"At time: {trackData.TimeStamp} the following plane: {trackData.TagId} left the Airspace");
+                sb.AppendLine($"At time: {trackData.TimeStamp} the following plane: {trackData.TagId} left the Airspace.");
             }
-            File.AppendAllText(LoggingFileName, sb.ToString());
+            File.AppendAllText(_pathToLoggingFile, sb.ToString());
         }
 
-        private void LogTrackEntered(object sender, List<TrackData> e)
+        public void LogTrackLeftToConsole(object sender, ICollection<TrackData> dataTracks)
+        {
+            foreach (var trackData in dataTracks)
+            {
+                _tracksLeftLogString += $"At time: {trackData.TimeStamp} the following plane: {trackData.TagId} left the Airspace.\n";
+            }
+        }
+
+        public void LogTrackEnteredToFile(object sender, ICollection<TrackData> e)
         {
             StringBuilder sb = new StringBuilder();
             foreach (var trackData in e)
             {
-                sb.AppendLine($"At time: {trackData.TimeStamp} the following plane: {trackData.TagId} entered the Airspace");
+                sb.AppendLine($"At time: {trackData.TimeStamp} the following plane: {trackData.TagId} entered the Airspace.");
             }
-            File.AppendAllText(LoggingFileName, sb.ToString());
+            File.AppendAllText(_pathToLoggingFile, sb.ToString());
         }
 
-        private void LogSeparation(object sender, List<TrackData> e)
+        public void LogTrackEnteredToConsole(object sender, ICollection<TrackData> dataTracks)
         {
-            Console.WriteLine("Ups! Der er en for tæt på");
+            foreach (var trackData in dataTracks)
+            {
+                _tracksEnteredLogString += $"At time: {trackData.TimeStamp} the following plane: {trackData.TagId} entered the Airspace.\n";
+            }
         }
 
-        public void LogData(object sender, List<TrackData> trackList)
+        public void LogSeparationToFile(object sender, ICollection<string> e)
+        {
+            var sb = new StringBuilder();
+            foreach (var timeStampAndTagId1AndTagId2 in e)
+            {
+                var trackItems = timeStampAndTagId1AndTagId2.Split(';');
+                sb.AppendLine($"At time: {trackItems[0]} the following two planes are too close to each other: " +
+                              $"{trackItems[1]} and {trackItems[2]}.");
+            }
+            File.AppendAllText(_pathToLoggingFile, sb.ToString());
+        }
+
+        public void LogSeparationToConsole(object sender, ICollection<string> dataTracks)
+        {
+            foreach (var timeStampAndTagId1AndTagId2 in dataTracks)
+            {
+                var trackItems = timeStampAndTagId1AndTagId2.Split(';');
+                _tracksSeparationLogString += $"At time: {trackItems[0]} the following two planes are too close to each other: " +
+                              $"{trackItems[1]} and {trackItems[2]}.\n";
+            }
+        }
+
+        public void LogData(object sender, ICollection<TrackData> trackList)
         {
             ClearData();
+
+            // Print events first and track data later.
+            if (!_tracksEnteredLogString.Equals(string.Empty))
+            {
+                Console.WriteLine(_tracksEnteredLogString);
+                Console.WriteLine();
+            }
+            if (!_tracksLeftLogString.Equals(string.Empty))
+            {
+                Console.WriteLine(_tracksLeftLogString);
+                Console.WriteLine();
+            }
+            if (!_tracksSeparationLogString.Equals(string.Empty))
+            {
+                Console.WriteLine(_tracksSeparationLogString);
+                Console.WriteLine();
+            }
 
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -70,8 +126,10 @@ namespace AirTrafficController
                 Console.WriteLine("Timestamp: " + trackData.TimeStamp);
                 Console.WriteLine("");
             }
-            File.AppendAllText("log.txt",stringBuilder.ToString());
 
+            _tracksEnteredLogString = "";
+            _tracksLeftLogString = "";
+            _tracksSeparationLogString = "";
         }
 
         public void ClearData()
@@ -84,6 +142,6 @@ namespace AirTrafficController
             {
                 //Do nothing. This should only occur when unit testing. Maybe because of NSubstitute.
             }
-            }
+        }
     }
 }

@@ -21,7 +21,7 @@ namespace AirTrafficController.Test.Unit
         public void Setup()
         {
             ITrackHandler _fakeTrackHandler = Substitute.For<ITrackHandler>();
-            _uut = new Logger(_fakeTrackHandler);
+            _uut = new Logger(_fakeTrackHandler, "../../logging.txt");
         }
 
         [Test]
