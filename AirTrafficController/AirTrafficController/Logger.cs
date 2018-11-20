@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
@@ -110,14 +111,13 @@ namespace AirTrafficController
 
             StringBuilder stringBuilder = new StringBuilder();
 
-            foreach (var trackData in trackList)
+            if (!trackList.Any())
             {
-                if (trackData.TagId.Equals(string.Empty))
-                {
-                    //return false if dataTracks is empty
-                    continue;
-                }
+                throw new ArgumentNullException("Logger.LogData: The given list is empty");
+            }
 
+            foreach (var trackData in trackList)
+            {             
                 Console.WriteLine("Track tag: " + trackData.TagId);
                 Console.WriteLine($"(X,Y) position: {trackData.X},{trackData.Y}");
                 Console.WriteLine("Altitude: " + trackData.Altitude);
@@ -134,7 +134,14 @@ namespace AirTrafficController
 
         public void ClearData()
         {
-            Console.Clear();
+            try
+            {
+                Console.Clear();
+            }
+            catch (IOException e)
+            {
+                //Do nothing. This should only occur when unit testing. Maybe because of NSubstitute.
+            }
         }
     }
 }
