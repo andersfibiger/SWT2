@@ -15,7 +15,7 @@ namespace AirTrafficController
             var dc = new Decoder(transponderDataReceiver);
             var track = new TrackHandler(new SeparationHandler(), 
                 new CalculateVelocity(), new CalculateCompassCourse(), dc);
-            var log = new Logger(track);
+            var log = new Logger(track, "..\\..\\logging.txt");
 
             while (true)
             {
