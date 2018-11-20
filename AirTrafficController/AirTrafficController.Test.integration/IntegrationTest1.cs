@@ -57,7 +57,7 @@ namespace AirTrafficController.Test.integration
         {
             
             _tracklist1.Add(_track1);
-            trackHandler.oldData = _tracklist1;
+            //trackHandler.oldData = _tracklist1;
             _tracklist2.Add(_track2);
 
             trackHandler.CalculateVelocityAndCompassCourse(_tracklist2);
