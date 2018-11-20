@@ -12,7 +12,7 @@ namespace AirTrafficController
     public class Logger : ILogger
     {
         //This for the file logging
-        private const string LoggingFileName = "logging.txt";
+        private const string LoggingFileName = "..\\..\\logging.txt";
 
         public Logger(ITrackHandler trackHandler)
         {
