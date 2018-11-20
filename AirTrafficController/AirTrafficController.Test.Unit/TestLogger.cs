@@ -11,7 +11,7 @@ using TransponderReceiver;
 
 namespace AirTrafficController.Test.Unit
 {
-    /*
+
     class TestLogger
     {
         private ILogger _uut;
@@ -21,36 +21,38 @@ namespace AirTrafficController.Test.Unit
         public void Setup()
         {
             ITrackHandler _fakeTrackHandler = Substitute.For<ITrackHandler>();
-            _uut = new Logger(_fakeTrackHandler);
+            _uut = new Logger(_fakeTrackHandler, "../../logging.txt");
         }
 
         [Test]
         public void LoggerOutput_TestIfPrintWasSucces()
         {
-            List<TrackData> printData = new List<TrackData>() {
-                new TrackData() {
+            List<TrackData> printData = new List<TrackData>()
+            {
+                new TrackData()
+                {
                     TagId = "ABC123",
                     X = 15000,
                     Y = 15000,
                     Altitude = 10000,
+                    Velocity = 300,
+                    CompassCourse = 180,
                     TimeStamp = DateTime.ParseExact("20151006213456789",
                         "yyyyMMddHHmmssfff",
                         null)
                 }
             };
 
-            //test if print(Logger) was succes
-            Assert.IsTrue(_uut.LogData(null, printData));
+            Assert.DoesNotThrow(() => _uut.LogData(null, printData)); //it should not throw an exception because list for logData is not empty
         }
 
         [Test]
-        public void LoggerOutput_TestIfPrintReturnsFalseWithNoData()
+        public void LoggerOutput_TestIfPrintThrowsExceptionWhenDataListIsEmpty()
         {
             //test if print(Logger) was false
-            Assert.IsFalse(_uut.LogData(null));
-            TrackData printData = new TrackData() { TagId = "" };
-            Assert.IsFalse(_uut.LogData(printData));
+            List<TrackData> emptyData = new List<TrackData>();
+            Assert.Throws<ArgumentNullException>(() => _uut.LogData(null, emptyData));
         }
     }
-    */
+    
 }
