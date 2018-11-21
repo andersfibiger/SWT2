@@ -1,22 +1,32 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AirTrafficController.Framework;
+using NSubstitute;
 using NUnit.Framework;
 using TransponderReceiver;
 
 namespace AirTrafficController.Test.Unit
 {
-    class TestIDecoder
+    class TestDecoder
     {
         private IDecoder _uut;
+        private List<TrackData> _decodedData;
 
         [SetUp]
         public void Setup()
         {
-            _uut = new Decoder();
+            ITransponderReceiver tr = Substitute.For<ITransponderReceiver>();
+            _uut = new Decoder(tr);
+            _decodedData = new List<TrackData>();
+            _uut.DecodedDataHandler += DecodedDataHandler;
+        }
+
+        private void DecodedDataHandler(object sender, List<TrackData> e)
+        {
+            _decodedData = e;
         }
 
         [Test]
@@ -28,8 +38,8 @@ namespace AirTrafficController.Test.Unit
             //Make new RawTransponderDataEventArgs
             RawTransponderDataEventArgs RawtestData = new RawTransponderDataEventArgs(testData);
             //Assert that the decoder 
-            List<TrackData> DecodedData = _uut.DecodeData(RawtestData);
-            Assert.That(DecodedData, Has.Count.EqualTo(1)); // Test that the decode only has decoded the one string array
+            _uut.DecodeData(null, RawtestData);
+            Assert.That(_decodedData, Has.Count.EqualTo(1)); // Test that the decode only has decoded the one string array
             //Assert.That(DecodedData[0].Count, Is.EqualTo(5)); // Test that the string array has the correct amount decoded.
         }
         [Test]
@@ -53,7 +63,8 @@ namespace AirTrafficController.Test.Unit
                     null)
             };
             //Assert that the test data has been read.
-            foreach (var trackData in _uut.DecodeData(RawtestData))
+            _uut.DecodeData(null, RawtestData);
+            foreach (var trackData in _decodedData)
             {
                 Assert.That(trackData.TagId, Is.EqualTo(CorrectTestData.TagId));
                 Assert.That(trackData.X, Is.EqualTo(CorrectTestData.X));
@@ -64,4 +75,4 @@ namespace AirTrafficController.Test.Unit
         }
 
     }
-}*/
+}
