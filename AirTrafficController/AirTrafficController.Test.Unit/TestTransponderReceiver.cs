@@ -43,7 +43,7 @@ namespace AirTrafficController.Test.Unit
             Assert.That(_receivedData.Count, Is.EqualTo(3));
         }
 
-        public void TransponderDataHandler(object sender, RawTransponderDataEventArgs data)
+        private void TransponderDataHandler(object sender, RawTransponderDataEventArgs data)
         {
             _receivedData = data.TransponderData;
         }
