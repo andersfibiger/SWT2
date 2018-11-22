@@ -31,11 +31,10 @@ namespace AirTrafficController.Test.integration
         private List<TrackData> _tracklist2;
         private List<TrackData> _tracklist3;
 
-
-
         [SetUp]
         public void Setup()
         {
+            Tracksaver = new List<TrackData>();
             _separationHandler = new SeparationHandler();
             _calculateCompassCource = new CalculateCompassCourse();
             _calcVelocity = new CalculateVelocity();
@@ -210,7 +209,7 @@ namespace AirTrafficController.Test.integration
 
             _fakeDecoder.DecodedDataHandler += Raise.Event<EventHandler<List<TrackData>>>(this, _tracklist1);
 
-            Assert.That(Tracksaver, Is.EqualTo(null));
+            Assert.That(Tracksaver, Is.Empty);
         }
 
         [Test]
