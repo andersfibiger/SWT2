@@ -29,10 +29,27 @@ namespace AirTrafficController.Test.Unit
 
             CalculateCompassCourse _fakeCalculateCompassCourse = Substitute.For<CalculateCompassCourse>();
             CalculateVelocity _fakeCalculateVelocity = Substitute.For<CalculateVelocity>();
+            // TODO method is called before tests for some reason, so args are null.
+            //_fakeCalculateCompassCourse.When(course => course.CalcCompassCourse(Arg.Any<TrackData>(),
+            //        Arg.Any<TrackData>()))
+            //    .Do(info => info[0] = new TrackData()
+            //    {
+            //        CompassCourse = 123.45
+            //    });
+
             IDecoder _fakeDecoder = Substitute.For<IDecoder>();
             //injecting 
             _uut = new TrackHandler(_fakesSeparationHandler, _fakeCalculateVelocity, _fakeCalculateCompassCourse, _fakeDecoder);
-            
+        }
+
+        [Test]
+        public void CalculateVelocityAndCompassCourse_SetsTheCorrectVelocityAndCourse()
+        {
+            var oldTrackDatas = new List<TrackData>() { new TrackData() { TagId = "ABC123" }};
+            var newTrackDatas = new List<TrackData>() { new TrackData() { TagId = "ABC123" } };
+            _uut.CalculateVelocityAndCompassCourse(oldTrackDatas, newTrackDatas);
+            Assert.That(oldTrackDatas[0].Velocity, Is.EqualTo(0.0));
+            Assert.That(oldTrackDatas[0].CompassCourse, Is.EqualTo(0.0));
         }
 
         [Test]
