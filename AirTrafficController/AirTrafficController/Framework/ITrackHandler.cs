@@ -14,7 +14,7 @@ namespace AirTrafficController.Framework
         event EventHandler<ICollection<TrackData>> LeftAirspaceWithinTimePeriodHandler;
         event EventHandler<ICollection<string>> SeparationJustNowHandler;
         event EventHandler<ICollection<string>> SeparationWithinTimePeriodHandler;
-        void CalculateVelocityAndCompassCourse(List<TrackData> newData);
+        void CalculateVelocityAndCompassCourse(List<TrackData> oldData, List<TrackData> newData);
 
     }
 }

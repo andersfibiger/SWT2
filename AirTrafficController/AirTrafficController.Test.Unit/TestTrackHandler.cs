@@ -13,12 +13,20 @@ namespace AirTrafficController.Test.Unit
     class TestTrack
     {
         private static TrackHandler _uut;
+        private readonly List<TrackData> _tracks = new List<TrackData>()
+        {
+            new TrackData() {TagId = "ABC123"},
+            new TrackData() {TagId = "DEF456"},
+            new TrackData() {TagId = "GHI789"}
+        };
 
         [SetUp]
         public void SetUp()
         {
             //creating the fake seperationHandler
             ISeparationHandler _fakesSeparationHandler = Substitute.For<ISeparationHandler>();
+            _fakesSeparationHandler.GetListOfSeparationEvents(null).ReturnsForAnyArgs(info => new List<string>());
+
             CalculateCompassCourse _fakeCalculateCompassCourse = Substitute.For<CalculateCompassCourse>();
             CalculateVelocity _fakeCalculateVelocity = Substitute.For<CalculateVelocity>();
             IDecoder _fakeDecoder = Substitute.For<IDecoder>();
@@ -27,38 +35,24 @@ namespace AirTrafficController.Test.Unit
             
         }
 
-
         [Test]
         //Check if _trackList gets updated with new track
-        public void UpdateTracks_EmptyBeforeInserting_tracksAreUpdated()
+        public void UpdateTracks_EmptyBeforeInserting_TracksAreUpdated()
         {
-            var info = new TrackData { TagId = "abcd", X = 111 };
-            List<TrackData> updatedString = new List<TrackData>();
-            updatedString.Add(info);
+            var info = new TrackData { TagId = "abcd", X = 11000, Y = 11000, Altitude = 1000};
+            List<TrackData> updatedString = new List<TrackData>() {info};
+            ICollection<TrackData> newTracksEventList = new List<TrackData>(updatedString.Count);
+            
+            // Add listener to the event handler which notifies us for new tracks entering the airspace.
+            _uut.EnteredAirspaceJustNowHandler += (sender, datas) => newTracksEventList = datas;
+
             _uut.UpdateTracks(null, updatedString);
-
-            Assert.That(updatedString.Contains(info), Is.True);
+            Assert.That(newTracksEventList.Contains(info), Is.True);
         }
-        
-        [Test]
-        [Ignore("The method tested only sets data and raises an event with a separation handler. The latter should be tested instead (with a fake)")]
-        public void UpdateTracks_OldElementDeleted_TracksAreUpdated()
-        {
-            //var info1 = new TrackData() {TagId = "abcd", "111", "2019", "12345", "010101" };
-            //var info2 = new TrackData() {TagId = "xyz123", "ggg222", "210900110022", "g", "999999" };
-            //List<TrackData> updatedString = new List<TrackData>();
-            //updatedString.Add(info1);
-            //updatedString.Add(info2);
-            //updatedString.Remove(info1);
-            //_uut.UpdateTracks(null, updatedString);
-
-            //Assert.That(updatedString.Contains(info1), Is.False);
-        }
-
         
         [TestCase(10000, 10000, 500)]
         [TestCase(90000, 90000, 20000)]
-        public static void WithinBoundary_ValuesInRange_resultIsCorret(int x, int y, int a)
+        public static void WithinBoundary_ValuesInRange_ResultIsTrue(int x, int y, int a)
         {
             TrackData trackData = new TrackData() {X = x, Y = y, Altitude = a};
             Assert.That(_uut.IsTrackWithinBoundary(trackData), Is.True);
@@ -77,13 +71,13 @@ namespace AirTrafficController.Test.Unit
             Assert.That(_uut.IsTrackWithinBoundary(trackData), Is.False);
         }
 
-
         [Test]
-        [Ignore("Needs to be fixed so that it calls a listener method here. Check how the test for TransponderReceiver was made")]
         public void GetSeperationEventList_EmptyTracks_ResultIsNull()
         {
-            //_uut.UpdateTracks(null, new List<TrackData>());
-            //Assert.That(_uut.GetListOfSeparationEvents(),Is.Null);
+            ICollection<string> separationEvents = new List<string>();
+            _uut.SeparationJustNowHandler += (sender, collection) => separationEvents = collection;
+            _uut.UpdateTracks(null, new List<TrackData>());
+            Assert.That(separationEvents,Is.Empty);
         }
 
         [Test]
@@ -107,6 +101,16 @@ namespace AirTrafficController.Test.Unit
             };
             _uut.RemoveTracksWithExpiredEvents(trackEventList, currentTimeInMs);
             Assert.That(trackEventList.Count, Is.EqualTo(expectedNoTracksLeft));
+        }
+
+        [TestCase("ABC123", true)]
+        [TestCase("DEF456", true)]
+        [TestCase("GHI789", true)]
+        [TestCase("HSW415", false)]
+        [TestCase("ABC12", false)]
+        public void TrackExistsInBoundary_OldAndNewTracks_ReturnsCorrectly(string tagId, bool expectedValue)
+        {
+            Assert.That(_uut.DoesTrackAlreadyExistInAirspace(_tracks, tagId), Is.EqualTo(expectedValue));
         }
     }
 }
