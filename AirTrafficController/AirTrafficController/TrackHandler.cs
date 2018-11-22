@@ -56,7 +56,7 @@ namespace AirTrafficController
                 if (!IsTrackWithinBoundary(trackData)) continue;
                 tracksInBoundaryList.Add(trackData);
 
-                if (!IsTrackNew(_oldTracksInBoundary, trackData.TagId)) continue;
+                if (DoesTrackAlreadyExistInAirspace(_oldTracksInBoundary, trackData.TagId)) continue;
                 tracksWhichEnteredAirspaceJustNow.Add(trackData);
                 _tracksWhichEnteredAirspaceWithinTimePeriod.Add(trackData, currentTimeInMs);
             }
@@ -113,9 +113,9 @@ namespace AirTrafficController
             TrackHandlerDataHandler?.Invoke(this, tracksInBoundaryList);
         }
 
-        public bool IsTrackNew(List<TrackData> oldTracksInBoundary, string trackDataTagId)
+        public bool DoesTrackAlreadyExistInAirspace(List<TrackData> oldTracksInBoundary, string trackDataTagId)
         {
-            return _oldTracksInBoundary.Any(data => data.TagId.Equals(trackDataTagId));
+            return oldTracksInBoundary.Any(data => data.TagId.Equals(trackDataTagId));
         }
 
         public void RemoveTracksWithExpiredEvents(IDictionary<TrackData, long> tracks, long currentTimeInMs)
@@ -143,11 +143,9 @@ namespace AirTrafficController
             {
                 foreach (var oldTrack in oldData)
                 {
-                    if (newTrack.TagId == oldTrack.TagId)
-                    {
-                        _cv.CalcVelocity(oldTrack, newTrack);
-                        _cc.CalcCompassCourse(oldTrack, newTrack);
-                    }
+                    if (newTrack.TagId != oldTrack.TagId) continue;
+                    _cv.CalcVelocity(oldTrack, newTrack);
+                    _cc.CalcCompassCourse(oldTrack, newTrack);
                 }
             }
         }

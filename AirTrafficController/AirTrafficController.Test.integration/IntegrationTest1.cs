@@ -7,6 +7,7 @@ using NSubstitute;
 using NUnit.Framework;
 using AirTrafficController.Framework;
 using AirTrafficController.Calculating;
+
 namespace AirTrafficController.Test.integration
 {
     public class IntegrationTest1
@@ -112,7 +113,6 @@ namespace AirTrafficController.Test.integration
 
             // _sut.CalculateVelocityAndCompassCourse(_tracklist1, _tracklist2);
             Assert.That(Math.Round(Tracksaver.ElementAt(0).Velocity), Is.EqualTo(5000));
-
         }
         [Test]
         public void TestCalculateVelocity_VelocityIs10000()
@@ -147,6 +147,7 @@ namespace AirTrafficController.Test.integration
             _tracklist1.Add(_track1);
             _tracklist2.Add(_track2);
 
+<<<<<<< HEAD
             _sut.TrackHandlerDataHandler += (sender, datas) => { Tracksaver = datas; };
 
             _fakeDecoder.DecodedDataHandler += Raise.Event<EventHandler<List<TrackData>>>(this, _tracklist1);
@@ -179,6 +180,10 @@ namespace AirTrafficController.Test.integration
             _fakeDecoder.DecodedDataHandler += Raise.Event<EventHandler<List<TrackData>>>(this, _tracklist1);
 
             Assert.That(Tracksaver.ElementAt(0).CompassCourse, Is.EqualTo(0));
+=======
+            _sut.CalculateVelocityAndCompassCourse(_tracklist1, _tracklist2);
+            Assert.That(Math.Round(_track2.CompassCourse),Is.EqualTo(90));
+>>>>>>> cf6c2a94cd345752fa0ae88f2fc1343c4d521bc3
         }
 
         [Test]
