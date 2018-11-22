@@ -100,7 +100,7 @@ namespace AirTrafficController
             }
 
             _oldTracksWithSeparation = currentSeparationEventList;
-            CalculateVelocityAndCompassCourse(tracksInBoundaryList);
+            CalculateVelocityAndCompassCourse(_oldTracksInBoundary, tracksInBoundaryList);
             _oldTracksInBoundary = tracksInBoundaryList;
 
             // Invoke events on all event handlers, if any.
@@ -137,11 +137,11 @@ namespace AirTrafficController
                                       && data.Altitude >= MinAltitude && data.Altitude <= MaxAltitude;
         }
 
-        public void CalculateVelocityAndCompassCourse(List<TrackData> newData)
+        public void CalculateVelocityAndCompassCourse(List<TrackData> oldData, List<TrackData> newData)
         {
             foreach (var newTrack in newData)
             {
-                foreach (var oldTrack in _oldTracksInBoundary)
+                foreach (var oldTrack in oldData)
                 {
                     if (newTrack.TagId == oldTrack.TagId)
                     {
