@@ -56,7 +56,7 @@ namespace AirTrafficController
                 if (!IsTrackWithinBoundary(trackData)) continue;
                 tracksInBoundaryList.Add(trackData);
 
-                if (!IsTrackNew(_oldTracksInBoundary, trackData.TagId)) continue;
+                if (IsTrackOld(_oldTracksInBoundary, trackData.TagId)) continue;
                 tracksWhichEnteredAirspaceJustNow.Add(trackData);
                 _tracksWhichEnteredAirspaceWithinTimePeriod.Add(trackData, currentTimeInMs);
             }
@@ -113,7 +113,7 @@ namespace AirTrafficController
             TrackHandlerDataHandler?.Invoke(this, tracksInBoundaryList);
         }
 
-        public bool IsTrackNew(List<TrackData> oldTracksInBoundary, string trackDataTagId)
+        public bool IsTrackOld(List<TrackData> oldTracksInBoundary, string trackDataTagId)
         {
             return _oldTracksInBoundary.Any(data => data.TagId.Equals(trackDataTagId));
         }

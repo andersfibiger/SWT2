@@ -7,6 +7,7 @@ using NSubstitute;
 using NUnit.Framework;
 using AirTrafficController.Framework;
 using AirTrafficController.Calculating;
+
 namespace AirTrafficController.Test.integration
 {
     public class IntegrationTest1
@@ -70,10 +71,8 @@ namespace AirTrafficController.Test.integration
         {
             _tracklist1.Add(_track1);
             _tracklist2.Add(_track2);
-            //save old trackdata
-            _sut._oldTracksInBoundary = _tracklist1;
             
-            _sut.CalculateVelocityAndCompassCourse(_tracklist2);
+            _sut.CalculateVelocityAndCompassCourse(_tracklist1, _tracklist2);
             Assert.That(Math.Round(_track2.Velocity), Is.EqualTo(5000));
         }
 
@@ -85,7 +84,7 @@ namespace AirTrafficController.Test.integration
             //save old trackdata
             _sut._oldTracksInBoundary = _tracklist1;
 
-            _sut.CalculateVelocityAndCompassCourse(_tracklist2);
+            _sut.CalculateVelocityAndCompassCourse(_tracklist1, _tracklist2);
             Assert.That(Math.Round(_track2.CompassCourse),Is.EqualTo(90));
         }
 
