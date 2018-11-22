@@ -109,7 +109,7 @@ namespace AirTrafficController
                 Console.WriteLine();
             }
 
-            StringBuilder stringBuilder = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
             if (!trackList.Any())
             {

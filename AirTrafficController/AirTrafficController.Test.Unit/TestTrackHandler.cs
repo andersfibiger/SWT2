@@ -13,6 +13,12 @@ namespace AirTrafficController.Test.Unit
     class TestTrack
     {
         private static TrackHandler _uut;
+        private readonly List<TrackData> _tracks = new List<TrackData>()
+        {
+            new TrackData() {TagId = "ABC123"},
+            new TrackData() {TagId = "DEF456"},
+            new TrackData() {TagId = "GHI789"}
+        };
 
         [SetUp]
         public void SetUp()
@@ -39,7 +45,6 @@ namespace AirTrafficController.Test.Unit
             
             // Add listener to the event handler which notifies us for new tracks entering the airspace.
             _uut.EnteredAirspaceJustNowHandler += (sender, datas) => newTracksEventList = datas;
-            
 
             _uut.UpdateTracks(null, updatedString);
             Assert.That(newTracksEventList.Contains(info), Is.True);
@@ -96,6 +101,16 @@ namespace AirTrafficController.Test.Unit
             };
             _uut.RemoveTracksWithExpiredEvents(trackEventList, currentTimeInMs);
             Assert.That(trackEventList.Count, Is.EqualTo(expectedNoTracksLeft));
+        }
+
+        [TestCase("ABC123", true)]
+        [TestCase("DEF456", true)]
+        [TestCase("GHI789", true)]
+        [TestCase("HSW415", false)]
+        [TestCase("ABC12", false)]
+        public void TrackExistsInBoundary_OldAndNewTracks_ReturnsCorrectly(string tagId, bool expectedValue)
+        {
+            Assert.That(_uut.DoesTrackAlreadyExistInAirspace(_tracks, tagId), Is.EqualTo(expectedValue));
         }
     }
 }
